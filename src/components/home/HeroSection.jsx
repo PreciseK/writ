@@ -1,59 +1,68 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import SafeIcon from '../../common/SafeIcon';
-import * as FiIcons from 'react-icons/fi';
+import { useNavigate } from 'react-router-dom';
+import { PulseFitHero } from '@/components/ui/pulse-fit-hero';
 
-const { FiCheck } = FiIcons;
+const programs = [
+  {
+    image: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=400&h=500&q=80',
+    category: 'IT CONSULTANCIES',
+    title: 'Dedicated delivery for tech firms',
+  },
+  {
+    image: 'https://images.unsplash.com/photo-1580894732444-8ecded7900cd?auto=format&fit=crop&w=400&h=500&q=80',
+    category: 'DIGITAL AGENCIES',
+    title: 'Scale capacity without hiring risk',
+  },
+  {
+    image: 'https://images.unsplash.com/photo-1573496130407-57329f01f769?auto=format&fit=crop&w=400&h=500&q=80',
+    category: 'SYSTEM INTEGRATORS',
+    title: 'Structured teams, clear outcomes',
+  },
+  {
+    image: 'https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&w=400&h=500&q=80',
+    category: 'SAAS COMPANIES',
+    title: 'Engineering capacity on demand',
+  },
+  {
+    image: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=400&h=500&q=80',
+    category: 'PRODUCT COMPANIES',
+    title: 'Outcome-focused subcontracting',
+  },
+];
 
 const HeroSection = () => {
+  const navigate = useNavigate();
+
   return (
-    <section className="py-[120px] bg-white overflow-hidden">
-      <div className="container-max">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-          <div>
-            <h1 className="text-[56px] font-extrabold text-[#0f172a] leading-[1.1] tracking-[-0.03em] mb-8">
-              More delivery capacity.<br />
-              Less risk.<br />
-              Better control.
-            </h1>
-
-            <ul className="space-y-4 mb-12">
-              {[
-                'Dedicated IT delivery teams',
-                'Capacity-based subcontracting',
-                'WRIT owns delivery & quality',
-              ].map((item) => (
-                <li key={item} className="flex items-center gap-3 text-[18px] text-[#64748b]">
-                  <div className="w-6 h-6 rounded-full bg-[#0b5fff] flex items-center justify-center flex-shrink-0">
-                    <SafeIcon icon={FiCheck} className="w-4 h-4 text-white" />
-                  </div>
-                  {item}
-                </li>
-              ))}
-            </ul>
-
-            <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
-              <Link to="/contact" className="btn btn-primary">
-                Let's Talk
-              </Link>
-              <Link to="/our-model" className="btn btn-secondary">
-                Explore Our Model
-              </Link>
-            </div>
-          </div>
-
-          <div className="hidden lg:block">
-            <div className="rounded-[12px] overflow-hidden shadow-[0_20px_40px_rgba(0,0,0,0.05)]">
-              <img
-                src="https://storage.googleapis.com/banani-generated-images/generated-images/330e63f8-5b12-41e6-8d2b-b4720f3e69d3.jpg"
-                alt="WRIT Delivery Concept"
-                className="w-full h-auto block"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+    <PulseFitHero
+      logo="Wager Technik"
+      navigation={[
+        { label: 'Services',      onClick: () => navigate('/services') },
+        { label: 'How We Work',   onClick: () => navigate('/how-we-work') },
+        { label: 'Our Model',     onClick: () => navigate('/our-model') },
+        { label: 'About',         onClick: () => navigate('/about') },
+      ]}
+      ctaButton={{
+        label: 'Contact Us',
+        onClick: () => navigate('/contact'),
+      }}
+      title={
+        <>
+          More delivery capacity.<br />
+          Less risk. Better control.
+        </>
+      }
+      subtitle="Wager Technik provides dedicated IT delivery teams under a capacity-based subcontracting model. We own delivery quality, technical oversight, and outcomes so you gain predictable capacity without hiring risk."
+      primaryAction={{
+        label: "Let's Talk",
+        onClick: () => navigate('/contact'),
+      }}
+      secondaryAction={{
+        label: 'Explore Our Model',
+        onClick: () => navigate('/our-model'),
+      }}
+      disclaimer="We don't lease developers. We deliver outcomes with accountable teams."
+      programs={programs}
+    />
   );
 };
 

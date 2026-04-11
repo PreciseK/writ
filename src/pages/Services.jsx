@@ -37,7 +37,7 @@ const Services = () => {
                   </div>
                   <div>
                     <h4 className="font-bold text-[#0f172a] mb-1">What it is</h4>
-                    <p className="text-[#64748b] text-[15px] leading-relaxed">A cohesive team of vetted engineers, managed by WRIT, entirely focused on your technical objectives.</p>
+                    <p className="text-[#64748b] text-[15px] leading-relaxed">A cohesive team of vetted engineers, managed by Wager Technik, entirely focused on your technical objectives.</p>
                   </div>
                 </div>
                 
@@ -63,7 +63,7 @@ const Services = () => {
               </div>
             </div>
             <div className="rounded-[12px] overflow-hidden shadow-sm">
-              <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" alt="Dedicated Teams" className="w-full h-auto block" />
+              <img src="https://images.unsplash.com/photo-1580894732444-8ecded7900cd?auto=format&fit=crop&w=1200&q=80" alt="Dedicated Teams" className="w-full h-auto block" />
             </div>
           </div>
         </div>
@@ -74,7 +74,7 @@ const Services = () => {
         <div className="container-max">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div className="rounded-[12px] overflow-hidden shadow-sm order-2 lg:order-1">
-              <img src="https://images.unsplash.com/photo-1531403009284-440f080d1e12?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" alt="Project Based" className="w-full h-auto block" />
+              <img src="https://images.unsplash.com/photo-1553877522-43269d4ea984?auto=format&fit=crop&w=1200&q=80" alt="Project Based" className="w-full h-auto block" />
             </div>
             <div className="order-1 lg:order-2">
               <h2 className="text-[32px] font-bold text-[#0f172a] mb-4">Project-Based Development</h2>

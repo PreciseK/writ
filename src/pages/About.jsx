@@ -11,7 +11,7 @@ const About = () => {
       <section className="bg-white py-24">
         <div className="container-max">
           <div className="max-w-3xl mx-auto text-center mb-20">
-            <h1 className="text-[48px] font-extrabold text-[#0f172a] tracking-tight mb-6">About WRIT</h1>
+            <h1 className="text-[48px] font-extrabold text-[#0f172a] tracking-tight mb-6">About Wager Technik</h1>
             <p className="text-[18px] text-[#64748b] leading-relaxed">
               We are a dedicated IT delivery partner focused on bringing reliable
               engineering capacity to ambitious companies. Our story began with a
@@ -22,7 +22,7 @@ const About = () => {
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div className="rounded-[12px] overflow-hidden shadow-sm">
-              <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=1200&q=80" alt="Leadership" className="w-full h-auto block" />
+              <img src="https://images.unsplash.com/photo-1573497701240-345a300b8d36?auto=format&fit=crop&w=1200&q=80" alt="Leadership" className="w-full h-auto block" />
             </div>
             <div>
               <h2 className="text-[32px] font-bold text-[#0f172a] mb-6">Leadership & Vision</h2>

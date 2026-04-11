@@ -21,7 +21,7 @@ const Navbar = () => {
       <div className="container-max">
         <div style={{ display: 'flex', justifyContent: 'space-between', height: '80px', alignItems: 'center' }}>
           <Link to="/" style={{ fontSize: '24px', fontWeight: 800, color: '#0f172a', letterSpacing: '-0.05em', textDecoration: 'none' }}>
-            WRIT
+            Wager Technik
           </Link>
 
           <div className="hidden md:flex" style={{ alignItems: 'center', gap: '32px' }}>

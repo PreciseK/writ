@@ -40,7 +40,7 @@ const OurModel = () => {
               </div>
             </div>
             <div className="rounded-[12px] overflow-hidden shadow-sm">
-              <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1200&q=80" alt="Abstract Subcontracting Model" className="w-full h-auto block" />
+              <img src="https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&w=1200&q=80" alt="Wager Technik Delivery Team" className="w-full h-auto block" />
             </div>
           </div>
         </div>
@@ -96,7 +96,7 @@ const OurModel = () => {
         <div className="container-max">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div className="rounded-[12px] overflow-hidden shadow-sm">
-              <img src="https://images.unsplash.com/photo-1556761175-5973e8e19e1e?auto=format&fit=crop&w=1200&q=80" alt="Partnership" className="w-full h-auto block" />
+              <img src="https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=1200&q=80" alt="Partnership" className="w-full h-auto block" />
             </div>
             <div>
               <h2 className="text-[32px] font-bold text-[#0f172a] mb-4">Why This Model Works</h2>

@@ -27,7 +27,7 @@ const Contact = () => {
                   </div>
                   <div>
                     <h4 className="font-bold text-[#0f172a] mb-1">Email Us</h4>
-                    <p className="text-[#64748b] text-[15px]">hello@writ.com</p>
+                    <p className="text-[#64748b] text-[15px]">hello@wagertechnik.de</p>
                   </div>
                 </div>
 
@@ -37,7 +37,7 @@ const Contact = () => {
                   </div>
                   <div>
                     <h4 className="font-bold text-[#0f172a] mb-1">Location</h4>
-                    <p className="text-[#64748b] text-[15px]">Berlin, Germany</p>
+                    <p className="text-[#64748b] text-[15px]">Schwalbenweg 11, 72356 Dautmergen, Germany</p>
                     <p className="text-[#64748b] text-[15px]">Remote Delivery Teams Available</p>
                   </div>
                 </div>

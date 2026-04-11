@@ -36,8 +36,8 @@ const HowWeWork = () => {
                     <SafeIcon icon={FiCheckCircle} className="w-5 h-5 text-[#0b5fff]" />
                   </div>
                   <div>
-                    <h4 className="font-bold text-[#0f172a] mb-1">WRIT Owns Delivery</h4>
-                    <p className="text-[#64748b] text-[15px] leading-relaxed">We take complete responsibility for the development process, timeline, and the final output quality.</p>
+                    <h4 className="font-bold text-[#0f172a] mb-1">Wager Technik Owns Delivery</h4>
+                    <p className="text-[#64748b] text-[15px] leading-relaxed">Wager Technik takes complete responsibility for the development process, timeline, and the final output quality.</p>
                   </div>
                 </div>
                 
@@ -53,7 +53,7 @@ const HowWeWork = () => {
               </div>
             </div>
             <div className="rounded-[12px] overflow-hidden shadow-sm">
-              <img src="https://images.unsplash.com/photo-1542744094-3a31f272c490?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" alt="Delivery Structure" className="w-full h-auto block" />
+              <img src="https://images.unsplash.com/photo-1573496130407-57329f01f769?auto=format&fit=crop&w=1200&q=80" alt="Delivery Structure" className="w-full h-auto block" />
             </div>
           </div>
         </div>
@@ -66,7 +66,7 @@ const HowWeWork = () => {
             <div className="rounded-[12px] overflow-hidden shadow-sm order-2 lg:order-1 relative bg-gray-100 aspect-square flex items-center justify-center">
               {/* Checkered pattern background equivalent */}
               <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(#0f172a 2px, transparent 2px)', backgroundSize: '30px 30px' }}></div>
-              <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" alt="Communication" className="relative z-10 w-full h-full object-cover" />
+              <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1200&q=80" alt="Communication" className="relative z-10 w-full h-full object-cover" />
             </div>
             <div className="order-1 lg:order-2">
               <h2 className="text-[32px] font-bold text-[#0f172a] mb-4">Communication</h2>

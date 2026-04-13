@@ -34,17 +34,6 @@ const HeroSection = () => {
 
   return (
     <PulseFitHero
-      logo="Wager Technik"
-      navigation={[
-        { label: 'Services',      onClick: () => navigate('/services') },
-        { label: 'How We Work',   onClick: () => navigate('/how-we-work') },
-        { label: 'Our Model',     onClick: () => navigate('/our-model') },
-        { label: 'About',         onClick: () => navigate('/about') },
-      ]}
-      ctaButton={{
-        label: 'Contact Us',
-        onClick: () => navigate('/contact'),
-      }}
       title={
         <>
           More delivery capacity.<br />

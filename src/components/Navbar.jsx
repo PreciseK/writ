@@ -1,68 +1,82 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { NavLink, Link } from 'react-router-dom';
-import SafeIcon from '../common/SafeIcon';
-import * as FiIcons from 'react-icons/fi';
+import { Menu, X } from 'lucide-react';
 
-const { FiMenu, FiX } = FiIcons;
+const links = [
+  { name: 'Services',    path: '/services' },
+  { name: 'How We Work', path: '/how-we-work' },
+  { name: 'Our Model',   path: '/our-model' },
+  { name: 'About',       path: '/about' },
+];
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const links = [
-    { name: 'Home', path: '/' },
-    { name: 'Services', path: '/services' },
-    { name: 'How We Work', path: '/how-we-work' },
-    { name: 'Our Model', path: '/our-model' },
-    { name: 'About', path: '/about' },
-  ];
-
   return (
-    <nav style={{ position: 'fixed', width: '100%', backgroundColor: '#ffffff', zIndex: 50, borderBottom: '1px solid #e2e8f0' }}>
-      <div className="container-max">
-        <div style={{ display: 'flex', justifyContent: 'space-between', height: '80px', alignItems: 'center' }}>
-          <Link to="/" style={{ fontSize: '24px', fontWeight: 800, color: '#0f172a', letterSpacing: '-0.05em', textDecoration: 'none' }}>
-            Wager Technik
-          </Link>
+    <nav className="fixed w-full z-50 bg-white border-b border-[#e2e8f0]">
+      <div className="flex justify-between items-center px-8 lg:px-16" style={{ paddingTop: '32px', paddingBottom: '32px' }}>
 
-          <div className="hidden md:flex" style={{ alignItems: 'center', gap: '32px' }}>
-            {links.map((link) => (
-              <NavLink
-                key={link.name}
-                to={link.path}
-                style={({ isActive }) => ({
-                  fontSize: '14px',
-                  fontWeight: 500,
-                  color: isActive ? '#0f172a' : '#64748b',
-                  textDecoration: 'none',
-                  transition: 'color 0.2s',
-                })}
-              >
-                {link.name}
-              </NavLink>
-            ))}
-            <Link to="/contact" className="btn btn-primary btn-sm">
-              Contact
-            </Link>
-          </div>
+        {/* Logo — matches PulseFitHero */}
+        <Link to="/" style={{ fontWeight: 700, fontSize: '24px', color: '#1a1a1a', textDecoration: 'none' }}>
+          Wager Technik
+        </Link>
 
-          <button
-            onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden"
-            style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#64748b' }}
-          >
-            <SafeIcon icon={isOpen ? FiX : FiMenu} style={{ width: '24px', height: '24px' }} />
-          </button>
+        {/* Desktop nav */}
+        <div className="hidden lg:flex items-center gap-8">
+          {links.map((link) => (
+            <NavLink
+              key={link.name}
+              to={link.path}
+              style={({ isActive }) => ({
+                fontSize: '16px',
+                fontWeight: 400,
+                color: isActive ? '#1a1a1a' : '#4a5568',
+                textDecoration: 'none',
+                transition: 'opacity 0.2s',
+              })}
+              className="hover:opacity-70"
+            >
+              {link.name}
+            </NavLink>
+          ))}
         </div>
+
+        {/* CTA — matches PulseFitHero rounded-full button */}
+        <Link
+          to="/contact"
+          className="hidden lg:inline-flex items-center px-6 py-3 rounded-full transition-all hover:scale-105"
+          style={{
+            background: '#ffffff',
+            border: '1px solid #e2e8f0',
+            fontSize: '16px',
+            fontWeight: 500,
+            color: '#1a1a1a',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+            textDecoration: 'none',
+          }}
+        >
+          Contact Us
+        </Link>
+
+        {/* Mobile toggle */}
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          className="lg:hidden"
+          style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#4a5568' }}
+        >
+          {isOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
       </div>
 
+      {/* Mobile menu */}
       {isOpen && (
-        <div style={{ backgroundColor: '#ffffff', borderBottom: '1px solid #e2e8f0', padding: '16px 48px', boxShadow: '0 4px 12px rgba(0,0,0,0.08)' }}>
+        <div className="lg:hidden bg-white border-t border-[#e2e8f0] px-8 py-6 flex flex-col gap-4">
           {links.map((link) => (
             <NavLink
               key={link.name}
               to={link.path}
               onClick={() => setIsOpen(false)}
-              style={{ display: 'block', padding: '8px 0', fontSize: '14px', fontWeight: 500, color: '#64748b', textDecoration: 'none' }}
+              style={{ fontSize: '16px', fontWeight: 400, color: '#4a5568', textDecoration: 'none' }}
             >
               {link.name}
             </NavLink>
@@ -70,10 +84,18 @@ const Navbar = () => {
           <Link
             to="/contact"
             onClick={() => setIsOpen(false)}
-            className="btn btn-primary"
-            style={{ marginTop: '12px', display: 'flex', justifyContent: 'center' }}
+            className="mt-2 flex items-center justify-center px-6 py-3 rounded-full"
+            style={{
+              background: '#ffffff',
+              border: '1px solid #e2e8f0',
+              fontSize: '16px',
+              fontWeight: 500,
+              color: '#1a1a1a',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+              textDecoration: 'none',
+            }}
           >
-            Contact
+            Contact Us
           </Link>
         </div>
       )}

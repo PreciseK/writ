@@ -16,7 +16,7 @@ const FEATURES = [
     label: 'German Accountability',
     icon: Shield01FreeIcons,
     image: 'https://images.unsplash.com/photo-1521737711867-e3b97375f902?q=80&w=1200',
-    description: 'German-registered GmbH with full legal accountability for every delivery.',
+    description: 'German-registered company with full legal accountability for every delivery.',
   },
   {
     id: 'leadership',

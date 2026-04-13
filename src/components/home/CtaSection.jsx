@@ -1,22 +1,23 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { BackgroundPaths } from '@/components/ui/background-paths';
 
 const CtaSection = () => {
+  const navigate = useNavigate();
+
   return (
-    <section className="py-[120px] bg-white text-center">
-      <div className="container-max">
-        <h2 className="text-[48px] font-extrabold text-[#0f172a] tracking-[-0.02em] mb-10">
-          Let's discuss your delivery needs
-        </h2>
-        <Link
-          to="/contact"
-          className="btn btn-primary"
-          style={{ padding: '16px 32px', fontSize: '18px' }}
+    <BackgroundPaths title="Let's discuss your delivery needs">
+      <div
+        className="inline-block group relative bg-gradient-to-b from-white/10 to-black/10 p-px rounded-2xl backdrop-blur-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300"
+      >
+        <button
+          onClick={() => navigate('/contact')}
+          className="rounded-[1.15rem] px-8 py-4 text-[16px] font-medium backdrop-blur-md bg-white/95 hover:bg-white text-black transition-all duration-300 group-hover:-translate-y-0.5 border border-black/10 hover:shadow-md flex items-center gap-3"
         >
-          Book a Call
-        </Link>
+          <span className="opacity-90 group-hover:opacity-100 transition-opacity">Book a Call</span>
+          <span className="opacity-70 group-hover:opacity-100 group-hover:translate-x-1.5 transition-all duration-300">→</span>
+        </button>
       </div>
-    </section>
+    </BackgroundPaths>
   );
 };
 

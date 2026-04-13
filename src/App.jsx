@@ -7,6 +7,8 @@ import HowWeWork from './pages/HowWeWork';
 import OurModel from './pages/OurModel';
 import About from './pages/About';
 import Contact from './pages/Contact';
+import Impressum from './pages/Impressum';
+import Privacy from './pages/Privacy';
 import ScrollToTop from './components/ScrollToTop';
 
 function App() {
@@ -21,6 +23,8 @@ function App() {
           <Route path="our-model" element={<OurModel />} />
           <Route path="about" element={<About />} />
           <Route path="contact" element={<Contact />} />
+          <Route path="impressum" element={<Impressum />} />
+          <Route path="privacy" element={<Privacy />} />
         </Route>
       </Routes>
     </HashRouter>

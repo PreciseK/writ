@@ -45,7 +45,17 @@ const Footer = () => {
 
         <div className="pt-8 flex flex-col md:flex-row justify-between items-center text-[14px] text-[#64748b] gap-4">
           <p>© 2025 Wager Technik. All rights reserved.</p>
-          <p>Designed with clarity.</p>
+          <p>
+            Designed by{' '}
+            <a 
+              href="https://maxmarkagency.com" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="hover:text-[#0f172a] transition-colors"
+            >
+              Maxmark Agency
+            </a>
+          </p>
         </div>
       </div>
     </footer>

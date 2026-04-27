@@ -1,257 +1,206 @@
+"use client";
+
+import React, { useRef } from "react";
 import { motion } from "framer-motion";
+import { ArrowRight } from "lucide-react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
 import { cn } from "@/lib/utils";
+
+gsap.registerPlugin(ScrollTrigger, useGSAP);
+
+// Concave-fan geometry. Indices 0..6, center is index 3.
+// Final rotateY = -(index - 3) * STEP_DEG → +66°, +44°, +22°, 0°, -22°, -44°, -66°
+const VISIBLE_COUNT = 7;
+const STEP_DEG = 22;
+const CARD_W = 200;
+const CARD_GAP = 12;
+const ROT_INITIAL_FACTOR = 0.3;
+
+const prefersReducedMotion = () =>
+  typeof window !== "undefined" &&
+  window.matchMedia &&
+  window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 export function PulseFitHero({
   title,
   subtitle,
-  primaryAction,
-  secondaryAction,
-  disclaimer,
-  socialProof,
+  primaryAction = { label: "Get started for Free", onClick: () => {} },
   programs = [],
+  captions = [],
   className,
-  children,
 }) {
+  const containerRef = useRef(null);
+  const stageRef = useRef(null);
+  const cardRefs = useRef([]);
+
+  // Take exactly 7 entries; if fewer are provided, repeat to fill.
+  const cards = [];
+  for (let i = 0; i < VISIBLE_COUNT; i++) {
+    cards.push(programs[i % Math.max(programs.length, 1)]);
+  }
+
+  useGSAP(
+    () => {
+      const els = cardRefs.current.filter(Boolean);
+      if (els.length !== VISIBLE_COUNT) return;
+
+      const center = Math.floor(VISIBLE_COUNT / 2);
+
+      // Per-card targets
+      const targets = els.map((_, idx) => {
+        const offset = idx - center;
+        return {
+          finalX: offset * (CARD_W + CARD_GAP),
+          finalRotY: -offset * STEP_DEG,
+        };
+      });
+
+      // Reduced motion: render the final fan immediately, no scroll trigger.
+      if (prefersReducedMotion()) {
+        els.forEach((el, idx) => {
+          gsap.set(el, {
+            x: targets[idx].finalX,
+            rotateY: targets[idx].finalRotY,
+          });
+        });
+        return;
+      }
+
+      // Initial state — stacked at center with partial pre-rotation
+      els.forEach((el, idx) => {
+        gsap.set(el, {
+          x: 0,
+          rotateY: targets[idx].finalRotY * ROT_INITIAL_FACTOR,
+        });
+      });
+
+      // Scrub timeline pinned to one viewport height
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: "top top",
+          end: "+=100%",
+          pin: true,
+          scrub: 1,
+          anticipatePin: 1,
+        },
+      });
+
+      els.forEach((el, idx) => {
+        tl.to(
+          el,
+          {
+            x: targets[idx].finalX,
+            rotateY: targets[idx].finalRotY,
+            ease: "none",
+          },
+          0
+        );
+      });
+    },
+    { scope: containerRef, dependencies: [cards.length] }
+  );
+
   return (
-    <div className={cn("relative w-full", className)} role="banner" aria-label="Hero section">
-      <section
-        className="relative w-full min-h-screen flex flex-col overflow-hidden"
-        style={{ background: "linear-gradient(180deg, #E8F0FF 0%, #F5F9FF 50%, #FFFFFF 100%)" }}
+    <div
+      ref={containerRef}
+      className={cn(
+        "relative w-full min-h-screen bg-[#FDFBF7] overflow-hidden flex flex-col items-center pt-28 pb-16",
+        className
+      )}
+    >
+      {/* Text block */}
+      <motion.div
+        className="flex flex-col items-center text-center z-10 px-4 mb-12"
+        initial={{ opacity: 0, y: 32 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7, ease: "easeOut" }}
       >
-        {/* Main Content */}
-        {children ? (
-          <div className="relative z-10 flex-1 flex items-center justify-center w-full">
-            {children}
-          </div>
-        ) : (
-          <div className="relative z-10 flex-1 flex flex-col items-center justify-center px-4 pt-48 pb-8">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="flex flex-col items-center text-center max-w-4xl"
-              style={{ gap: "32px" }}
-            >
-              {/* Title */}
-              <h1
-                style={{
-                  fontWeight: 400,
-                  fontSize: "clamp(36px, 6vw, 72px)",
-                  lineHeight: "1.1",
-                  color: "#1a1a1a",
-                  letterSpacing: "-0.02em",
-                }}
-              >
-                {title}
-              </h1>
+        <h1 className="text-5xl md:text-6xl lg:text-7xl tracking-tight text-[#111827] leading-[1.1] mb-5 font-serif">
+          {title}
+        </h1>
+        <p className="text-lg md:text-xl text-[#4B5563] max-w-2xl mb-8">
+          {subtitle}
+        </p>
+        <button
+          onClick={primaryAction.onClick}
+          className="flex items-center gap-2 bg-[#111827] text-white px-7 py-3.5 rounded-full text-base font-medium hover:bg-[#1f2937] transition-colors shadow-lg"
+        >
+          {primaryAction.label}
+          <ArrowRight className="w-4 h-4" />
+        </button>
+      </motion.div>
 
-              {/* Subtitle */}
-              <p
-                style={{
-                  fontWeight: 400,
-                  fontSize: "clamp(16px, 2vw, 20px)",
-                  lineHeight: "1.6",
-                  color: "#4a5568",
-                  maxWidth: "600px",
+      {/* Stage: stacked cards that spread on scroll */}
+      <div
+        ref={stageRef}
+        className="relative w-full flex items-center justify-center"
+        style={{
+          height: "360px",
+          perspective: "1100px",
+          perspectiveOrigin: "50% 50%",
+        }}
+      >
+        <div className="relative" style={{ width: CARD_W, height: 320 }}>
+          {cards.map((program, idx) => {
+            const offset = idx - Math.floor(VISIBLE_COUNT / 2);
+            // Static z-index so center card sits on top of the stack at progress 0
+            const z = VISIBLE_COUNT - Math.abs(offset);
+            return (
+              <CurvedCard
+                key={idx}
+                program={program}
+                zIndex={z}
+                refCb={(el) => {
+                  cardRefs.current[idx] = el;
                 }}
-              >
-                {subtitle}
+              />
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Captions */}
+      {captions.length > 0 && (
+        <div className="w-full max-w-5xl mx-auto px-8 mt-10 grid grid-cols-1 md:grid-cols-3 gap-10 text-center">
+          {captions.map((cap, i) => (
+            <div key={i}>
+              <h3 className="text-[#111827] font-semibold text-base mb-2">
+                {cap.title}
+              </h3>
+              <p className="text-[#6B7280] text-sm leading-relaxed">
+                {cap.description}
               </p>
-
-              {/* Action Buttons */}
-              {(primaryAction || secondaryAction) && (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.6, delay: 0.4 }}
-                  className="flex flex-col sm:flex-row items-center gap-4"
-                >
-                  {primaryAction && (
-                    <button
-                      onClick={primaryAction.onClick}
-                      className="flex flex-row items-center gap-2 px-8 py-4 rounded-full transition-all hover:scale-105"
-                      style={{
-                        background: "#1a1a1a",
-                        fontSize: "18px",
-                        fontWeight: 500,
-                        color: "#FFFFFF",
-                        boxShadow: "0 4px 16px rgba(0, 0, 0, 0.15)",
-                      }}
-                    >
-                      {primaryAction.label}
-                      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                        <path
-                          d="M7 10H13M13 10L10 7M13 10L10 13"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                    </button>
-                  )}
-
-                  {secondaryAction && (
-                    <button
-                      onClick={secondaryAction.onClick}
-                      className="px-8 py-4 rounded-full transition-all hover:scale-105"
-                      style={{
-                        background: "transparent",
-                        border: "1px solid #cbd5e0",
-                        fontSize: "18px",
-                        fontWeight: 500,
-                        color: "#1a1a1a",
-                      }}
-                    >
-                      {secondaryAction.label}
-                    </button>
-                  )}
-                </motion.div>
-              )}
-
-              {/* Disclaimer */}
-              {disclaimer && (
-                <motion.p
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.6, delay: 0.6 }}
-                  style={{
-                    fontSize: "13px",
-                    fontWeight: 400,
-                    color: "#718096",
-                    fontStyle: "italic",
-                  }}
-                >
-                  {disclaimer}
-                </motion.p>
-              )}
-
-              {/* Social Proof */}
-              {socialProof && (
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.7 }}
-                  className="flex flex-row items-center gap-3"
-                >
-                  <div className="flex flex-row -space-x-2">
-                    {socialProof.avatars.map((avatar, index) => (
-                      <img
-                        key={index}
-                        src={avatar}
-                        alt={`User ${index + 1}`}
-                        className="rounded-full border-2 border-white"
-                        style={{ width: "40px", height: "40px", objectFit: "cover" }}
-                      />
-                    ))}
-                  </div>
-                  <span style={{ fontSize: "14px", fontWeight: 500, color: "#4a5568" }}>
-                    {socialProof.text}
-                  </span>
-                </motion.div>
-              )}
-            </motion.div>
-          </div>
-        )}
-
-        {/* Program Cards Carousel */}
-        {programs.length > 0 && (
-          <motion.div
-            initial={{ opacity: 0, y: 100 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.8 }}
-            className="relative z-10 w-full overflow-hidden"
-            style={{ paddingTop: "60px", paddingBottom: "60px" }}
-          >
-            {/* Gradient Overlays */}
-            <div
-              className="absolute left-0 top-0 bottom-0 z-10 pointer-events-none"
-              style={{
-                width: "150px",
-                background: "linear-gradient(90deg, #FFFFFF 0%, rgba(255, 255, 255, 0) 100%)",
-              }}
-            />
-            <div
-              className="absolute right-0 top-0 bottom-0 z-10 pointer-events-none"
-              style={{
-                width: "150px",
-                background: "linear-gradient(270deg, #FFFFFF 0%, rgba(255, 255, 255, 0) 100%)",
-              }}
-            />
-
-            {/* Scrolling Container */}
-            <motion.div
-              className="flex items-center"
-              animate={{ x: [0, -((programs.length * 380) / 2)] }}
-              transition={{
-                x: {
-                  repeat: Infinity,
-                  repeatType: "loop",
-                  duration: programs.length * 3,
-                  ease: "linear",
-                },
-              }}
-              style={{ gap: "24px", paddingLeft: "24px" }}
-            >
-              {[...programs, ...programs].map((program, index) => (
-                <motion.div
-                  key={index}
-                  whileHover={{ scale: 1.05, y: -10 }}
-                  transition={{ duration: 0.3 }}
-                  onClick={program.onClick}
-                  className="flex-shrink-0 cursor-pointer relative overflow-hidden"
-                  style={{
-                    width: "356px",
-                    height: "480px",
-                    borderRadius: "24px",
-                    boxShadow: "0 8px 32px rgba(0, 0, 0, 0.12)",
-                  }}
-                >
-                  <img
-                    src={program.image}
-                    alt={program.title}
-                    style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                  />
-                  <div
-                    className="absolute inset-0"
-                    style={{
-                      background: "linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.7) 100%)",
-                    }}
-                  />
-                  <div
-                    className="absolute bottom-0 left-0 right-0 p-6"
-                    style={{ display: "flex", flexDirection: "column", gap: "8px" }}
-                  >
-                    <span
-                      style={{
-                        fontSize: "12px",
-                        fontWeight: 500,
-                        color: "rgba(255, 255, 255, 0.8)",
-                        textTransform: "uppercase",
-                        letterSpacing: "0.1em",
-                      }}
-                    >
-                      {program.category}
-                    </span>
-                    <h3
-                      style={{
-                        fontSize: "24px",
-                        fontWeight: 600,
-                        color: "#FFFFFF",
-                        lineHeight: "1.3",
-                      }}
-                    >
-                      {program.title}
-                    </h3>
-                  </div>
-                </motion.div>
-              ))}
-            </motion.div>
-          </motion.div>
-        )}
-      </section>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
 
-export default PulseFitHero;
+function CurvedCard({ program, zIndex, refCb }) {
+  if (!program) return null;
+  return (
+    <div
+      ref={refCb}
+      className="absolute top-0 left-0 rounded-[22px] overflow-hidden"
+      style={{
+        width: CARD_W,
+        height: 320,
+        zIndex,
+        transformOrigin: "center center",
+        willChange: "transform",
+      }}
+    >
+      <img
+        src={program.image}
+        alt={program.title || ""}
+        className="w-full h-full object-cover pointer-events-none select-none"
+        draggable={false}
+      />
+    </div>
+  );
+}

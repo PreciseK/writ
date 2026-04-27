@@ -68,9 +68,39 @@ The `programs` array shrinks from 5 to 7 entries with new portrait URLs. `catego
 - Page does not throw or warn about missing motion handlers.
 - Lighthouse / dev console clean.
 
-## Phase 2 (deferred — not part of this work)
+## Phase 2 — Stack → Spread Scroll-Scrub
 
-- GSAP scroll-driven rotation that intensifies the fan as the user scrolls past
-- Framer entrance stagger
+**Mechanic:** GSAP ScrollTrigger pins the hero for one viewport height (`+=100%`). Scroll position scrubs a timeline that interpolates each card from a stacked-and-pre-rotated initial state to the full concave fan from Phase 1.
+
+**Constants:**
+
+| | Value |
+| --- | --- |
+| `ROT_INITIAL_FACTOR` | `0.3` (initial `rotateY` is 30% of final, so cards splay slightly even when stacked) |
+| Pin distance | `+=100%` (one viewport height of scroll) |
+| `scrub` | `1` (1s catch-up easing) |
+
+**Per-card animation:**
+
+```text
+card[i].x         : 0                              → offset × (cardWidth + gap)
+card[i].rotateY   : finalRotateY × ROT_INITIAL_FACTOR → finalRotateY
+```
+
+Both properties tween together, scrubbed to scroll progress.
+
+**Initial state (progress 0):** all 7 cards at `x = 0`, each with `rotateY = finalRotateY × 0.3`. Reads as an overlapping stack with hints of the fan shape.
+
+**Final state (progress 1):** identical to Phase 1 — full concave fan.
+
+**Z-index:** center card on top during stack (`zIndex = -|offset|`) so the stack reads as a coherent deck rather than a jumble. Z-index is static — does not animate.
+
+**Cleanup:** `ScrollTrigger.create` returns a token that we tear down in the `useGSAP` cleanup. Use `@gsap/react`'s `useGSAP` hook for proper context scoping.
+
+**Reduced motion:** if `prefers-reduced-motion: reduce`, skip ScrollTrigger and render the fan in its final state immediately.
+
+## Phase 3 (deferred)
+
+- Framer entrance stagger when section first enters viewport
 - Hover lift on individual cards
-- Mobile responsive treatment (current scope assumes desktop reference)
+- Mobile responsive treatment

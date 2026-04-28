@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import PageTransition from '../components/PageTransition';
 import HeroSection from '../components/home/HeroSection';
 import WhatWeDoSection from '../components/home/WhatWeDoSection';

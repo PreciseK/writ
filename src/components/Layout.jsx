@@ -1,9 +1,11 @@
-import { Outlet, useLocation } from 'react-router-dom';
+"use client";
+
+import { usePathname } from 'next/navigation';
 import HomeNavbar from './HomeNavbar';
 import Footer from './Footer';
 
 const Layout = () => {
-  const { pathname } = useLocation();
+  const { pathname } = ({ pathname: usePathname() });
   const isHome = pathname === '/';
 
   return (

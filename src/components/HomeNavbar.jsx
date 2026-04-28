@@ -1,5 +1,8 @@
+"use client";
+
 import { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -14,8 +17,8 @@ const links = [
 const HomeNavbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const navigate = useNavigate();
-  const { pathname } = useLocation();
+  const navigate = useRouter();
+  const { pathname } = ({ pathname: usePathname() });
   const isHome = pathname === '/';
 
   useEffect(() => {

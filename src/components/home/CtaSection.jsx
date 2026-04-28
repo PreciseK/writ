@@ -1,8 +1,10 @@
-import { useNavigate } from 'react-router-dom';
+"use client";
+
+import { useRouter } from 'next/navigation';
 import { BackgroundPaths } from '@/components/ui/background-paths';
 
 const CtaSection = () => {
-  const navigate = useNavigate();
+  const navigate = useRouter();
 
   return (
     <BackgroundPaths title="Let's discuss your delivery needs">

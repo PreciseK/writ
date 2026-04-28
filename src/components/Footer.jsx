@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 
 const Footer = () => {
   return (
@@ -26,7 +26,7 @@ const Footer = () => {
                 { label: 'Our Model',   path: '/our-model' },
               ].map(({ label, path }) => (
                 <li key={label}>
-                  <Link to={path} className="text-[15px] text-[#64748b] hover:text-[#0f172a] transition-colors">
+                  <Link href={path} className="text-[15px] text-[#64748b] hover:text-[#0f172a] transition-colors">
                     {label}
                   </Link>
                 </li>
@@ -37,8 +37,8 @@ const Footer = () => {
           <div>
             <h5 className="text-[14px] font-semibold tracking-[0.05em] uppercase text-[#0f172a] mb-6">Legal</h5>
             <ul className="space-y-3">
-              <li><Link to="/impressum" className="text-[15px] text-[#64748b] hover:text-[#0f172a] transition-colors">Impressum</Link></li>
-              <li><Link to="/privacy" className="text-[15px] text-[#64748b] hover:text-[#0f172a] transition-colors">Datenschutz (Privacy)</Link></li>
+              <li><Link href="/impressum" className="text-[15px] text-[#64748b] hover:text-[#0f172a] transition-colors">Impressum</Link></li>
+              <li><Link href="/privacy" className="text-[15px] text-[#64748b] hover:text-[#0f172a] transition-colors">Datenschutz (Privacy)</Link></li>
             </ul>
           </div>
         </div>

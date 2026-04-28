@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from 'react';
 import PageTransition from '../components/PageTransition';
 import PageHero from '@/components/ui/page-hero';

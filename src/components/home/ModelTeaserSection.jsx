@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { CheckCircle } from 'lucide-react';
 
 const points = [
@@ -37,7 +37,7 @@ const ModelTeaserSection = () => {
             </p>
 
             <Link
-              to="/our-model"
+              href="/our-model"
               className="inline-flex items-center gap-2 px-8 py-4 rounded-full border border-foreground text-foreground font-medium text-[16px] hover:bg-foreground hover:text-white transition-all"
             >
               Learn More About Our Model

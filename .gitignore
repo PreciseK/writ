@@ -12,6 +12,13 @@ dist
 dist-ssr
 *.local
 
+# Next.js
+.next/
+out/
+
+# Local screenshots (debug output)
+hero-*.png
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

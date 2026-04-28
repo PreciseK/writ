@@ -76,20 +76,23 @@ The `programs` array shrinks from 5 to 7 entries with new portrait URLs. `catego
 
 | | Value |
 | --- | --- |
-| `ROT_INITIAL_FACTOR` | `0.3` (initial `rotateY` is 30% of final, so cards splay slightly even when stacked) |
+| `STEP_DEG` | `22` (rotateY increment per card index) |
+| `CARD_W × CARD_H` | `240 × 360` |
+| `CARD_SPACING` | `224` (slightly less than `CARD_W` so adjacent cards visually overlap a few pixels at the edges) |
 | Pin distance | `+=100%` (one viewport height of scroll) |
 | `scrub` | `1` (1s catch-up easing) |
 
 **Per-card animation:**
 
 ```text
-card[i].x         : 0                              → offset × (cardWidth + gap)
-card[i].rotateY   : finalRotateY × ROT_INITIAL_FACTOR → finalRotateY
+offset            = index − 3
+card[i].x         : 0  →  offset × CARD_SPACING
+card[i].rotateY   : 0  →  -offset × STEP_DEG
 ```
 
 Both properties tween together, scrubbed to scroll progress.
 
-**Initial state (progress 0):** all 7 cards at `x = 0`, each with `rotateY = finalRotateY × 0.3`. Reads as an overlapping stack with hints of the fan shape.
+**Initial state (progress 0):** all 7 cards at `x = 0`, `rotateY = 0`. With center card on top via static z-index, only the center card is visible — clean "deck of cards" look.
 
 **Final state (progress 1):** identical to Phase 1 — full concave fan.
 

@@ -10,18 +10,36 @@ import { cn } from "@/lib/utils";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
-// Concave-fan geometry. Indices 0..6, center is index 3.
-// Final rotateY = -(index - 3) * STEP_DEG → +66°, +44°, +22°, 0°, -22°, -44°, -66°
+// ---- Concave-fan geometry (pure rotateY + uniform translateX) -------------
+//
+// 7 cards arranged in a uniformly-spaced row, each rotated around its own
+// center to face the fan center. No translateZ — the "concave" effect reads
+// from rotation alone, so cards keep uniform spacing in screen space (no
+// perspective compression at the edges).
+//
+//   For card at offset ∈ {-3, -2, -1, 0, 1, 2, 3}:
+//     x      = offset × CARD_SPACING
+//     rotY   = -offset × STEP_DEG       (face inward toward fan center)
+// ---------------------------------------------------------------------------
+
 const VISIBLE_COUNT = 7;
 const STEP_DEG = 22;
-const CARD_W = 200;
-const CARD_GAP = 12;
-const ROT_INITIAL_FACTOR = 0.3;
+const CARD_W = 240;
+const CARD_H = 360;
+const CARD_SPACING = 224; // < CARD_W → adjacent cards visually overlap slightly
 
 const prefersReducedMotion = () =>
   typeof window !== "undefined" &&
   window.matchMedia &&
   window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+function arcTargetForIndex(idx) {
+  const offset = idx - Math.floor(VISIBLE_COUNT / 2);
+  return {
+    x: offset * CARD_SPACING,
+    rotateY: -offset * STEP_DEG,
+  };
+}
 
 export function PulseFitHero({
   title,
@@ -32,7 +50,6 @@ export function PulseFitHero({
   className,
 }) {
   const containerRef = useRef(null);
-  const stageRef = useRef(null);
   const cardRefs = useRef([]);
 
   // Take exactly 7 entries; if fewer are provided, repeat to fill.
@@ -46,37 +63,17 @@ export function PulseFitHero({
       const els = cardRefs.current.filter(Boolean);
       if (els.length !== VISIBLE_COUNT) return;
 
-      const center = Math.floor(VISIBLE_COUNT / 2);
+      const targets = els.map((_, idx) => arcTargetForIndex(idx));
 
-      // Per-card targets
-      const targets = els.map((_, idx) => {
-        const offset = idx - center;
-        return {
-          finalX: offset * (CARD_W + CARD_GAP),
-          finalRotY: -offset * STEP_DEG,
-        };
-      });
-
-      // Reduced motion: render the final fan immediately, no scroll trigger.
+      // Reduced motion: skip ScrollTrigger; render in final fan immediately.
       if (prefersReducedMotion()) {
-        els.forEach((el, idx) => {
-          gsap.set(el, {
-            x: targets[idx].finalX,
-            rotateY: targets[idx].finalRotY,
-          });
-        });
+        els.forEach((el, idx) => gsap.set(el, targets[idx]));
         return;
       }
 
-      // Initial state — stacked at center with partial pre-rotation
-      els.forEach((el, idx) => {
-        gsap.set(el, {
-          x: 0,
-          rotateY: targets[idx].finalRotY * ROT_INITIAL_FACTOR,
-        });
-      });
+      // Initial state — every card collapsed at the origin facing viewer.
+      els.forEach((el) => gsap.set(el, { x: 0, rotateY: 0 }));
 
-      // Scrub timeline pinned to one viewport height
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: containerRef.current,
@@ -92,8 +89,8 @@ export function PulseFitHero({
         tl.to(
           el,
           {
-            x: targets[idx].finalX,
-            rotateY: targets[idx].finalRotY,
+            x: targets[idx].x,
+            rotateY: targets[idx].rotateY,
             ease: "none",
           },
           0
@@ -133,20 +130,26 @@ export function PulseFitHero({
         </button>
       </motion.div>
 
-      {/* Stage: stacked cards that spread on scroll */}
+      {/* Stage: cards stacked at origin, animated onto the cylinder arc */}
       <div
-        ref={stageRef}
         className="relative w-full flex items-center justify-center"
         style={{
-          height: "360px",
-          perspective: "1100px",
+          height: CARD_H + 40,
+          perspective: "1200px",
           perspectiveOrigin: "50% 50%",
         }}
       >
-        <div className="relative" style={{ width: CARD_W, height: 320 }}>
+        <div
+          className="relative"
+          style={{
+            width: CARD_W,
+            height: CARD_H,
+            transformStyle: "preserve-3d",
+          }}
+        >
           {cards.map((program, idx) => {
             const offset = idx - Math.floor(VISIBLE_COUNT / 2);
-            // Static z-index so center card sits on top of the stack at progress 0
+            // Static z-index so center card sits on top in stacked state.
             const z = VISIBLE_COUNT - Math.abs(offset);
             return (
               <CurvedCard
@@ -186,12 +189,12 @@ function CurvedCard({ program, zIndex, refCb }) {
   return (
     <div
       ref={refCb}
-      className="absolute top-0 left-0 rounded-[22px] overflow-hidden"
+      className="absolute top-0 left-0 rounded-[22px] overflow-hidden shadow-xl"
       style={{
         width: CARD_W,
-        height: 320,
+        height: CARD_H,
         zIndex,
-        transformOrigin: "center center",
+        transformStyle: "preserve-3d",
         willChange: "transform",
       }}
     >

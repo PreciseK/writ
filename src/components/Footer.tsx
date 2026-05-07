@@ -8,7 +8,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-16 pb-16 border-b border-[#e2e8f0]"
           style={{ gridTemplateColumns: '2fr 1fr 1fr' }}>
           <div>
-            <h4 className="text-[20px] font-bold text-[#0f172a] mb-4">Wager Technik</h4>
+            <img src="/logo.png" alt="Wager Technik" className="h-8 w-auto mb-6" />
             <p className="text-[15px] text-[#64748b] mb-2">Schwalbenweg 11</p>
             <p className="text-[15px] text-[#64748b] mb-2">72356 Dautmergen, Germany</p>
             <a href="mailto:hello@wagertechnik.de" className="text-[15px] text-[#64748b] hover:text-[#0f172a] mt-4 block">

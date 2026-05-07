@@ -56,6 +56,7 @@ export default {
         syne: ['Syne', 'sans-serif'],
         dm: ['DM Sans', 'sans-serif'],
         inter: ['"Century Gothic"', 'CenturyGothic', 'AppleGothic', 'Trebuchet MS', 'sans-serif'],
+        instrument: ['var(--font-instrument-serif)', '"Instrument Serif"', 'serif'],
       },
     },
   },

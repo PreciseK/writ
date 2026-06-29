@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from 'next/navigation';
 
 const BASE_PEOPLE = [
@@ -20,30 +20,48 @@ const tilts  = Array.from({ length: N_REPEATS }, () => BASE_TILTS).flat();
 const TOTAL  = people.length; // 35
 
 const ORBIT_DURATION = 50; // seconds per full revolution
-const SECTION_H = 800;
-const PIVOT_Y   = 1220; // orbit centre, px from section top
-const RADIUS    = 1100;
-// Distance from section vertical-centre (400px) down to orbit centre:
-const DY = PIVOT_Y - SECTION_H / 2; // 820
+
+function getOrbitConfig(width?: number) {
+  const w = width ?? (typeof window !== "undefined" ? window.innerWidth : 1200);
+  if (w < 640) return { radius: 340, pivotY: 480, sectionH: 680, imgW: 110, imgH: 150 };
+  if (w < 1024) return { radius: 700, pivotY: 900, sectionH: 800, imgW: 140, imgH: 190 };
+  return { radius: 1100, pivotY: 1220, sectionH: 800, imgW: 170, imgH: 230 };
+}
 
 const CtaSection = () => {
-  const router  = useRouter();
-  const refs    = useRef<(HTMLDivElement | null)[]>([]);
-  const rafId   = useRef<number>(0);
-  const startTs = useRef<number>(0);
+  const router      = useRouter();
+  const refs        = useRef<(HTMLDivElement | null)[]>([]);
+  const rafId       = useRef<number>(0);
+  const startTs     = useRef<number>(0);
+  const orbitRef    = useRef(getOrbitConfig());
+  const [imgSize, setImgSize]   = useState({ w: orbitRef.current.imgW, h: orbitRef.current.imgH });
+  const [sectionH, setSectionH] = useState(orbitRef.current.sectionH);
+
+  useEffect(() => {
+    const onResize = () => {
+      const cfg = getOrbitConfig(window.innerWidth);
+      orbitRef.current = cfg;
+      setImgSize({ w: cfg.imgW, h: cfg.imgH });
+      setSectionH(cfg.sectionH);
+    };
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
 
   useEffect(() => {
     const tick = (now: number) => {
       if (!startTs.current) startTs.current = now;
       const elapsed = (now - startTs.current) / 1000;
       const base    = (elapsed / ORBIT_DURATION) * 2 * Math.PI;
+      const { radius, pivotY, sectionH: sh } = orbitRef.current;
+      const dy = pivotY - sh / 2;
 
       for (let i = 0; i < TOTAL; i++) {
         const el = refs.current[i];
         if (!el) continue;
         const a = (2 * Math.PI * i / TOTAL) + base;
-        const x = (RADIUS * Math.sin(a)).toFixed(2);
-        const y = (DY - RADIUS * Math.cos(a)).toFixed(2);
+        const x = (radius * Math.sin(a)).toFixed(2);
+        const y = (dy - radius * Math.cos(a)).toFixed(2);
         // Pure translate keeps each card upright; tilt is a fixed decorative rotation
         el.style.transform =
           `translate(calc(-50% + ${x}px), calc(-50% + ${y}px)) rotate(${tilts[i]}deg)`;
@@ -59,7 +77,7 @@ const CtaSection = () => {
   return (
     <section
       className="relative overflow-hidden bg-[#F5F0E6] flex flex-col items-center justify-end pb-28"
-      style={{ height: SECTION_H }}
+      style={{ height: sectionH }}
     >
       {/* Images — each anchored at section centre, moved by JS translate */}
       {people.map((src, i) => (
@@ -72,8 +90,8 @@ const CtaSection = () => {
             src={src}
             alt=""
             style={{
-              width: 170,
-              height: 230,
+              width: imgSize.w,
+              height: imgSize.h,
               objectFit: 'cover',
               borderRadius: 20,
               boxShadow: '0 6px 24px rgba(0,0,0,0.18)',

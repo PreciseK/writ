@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, ReactNode } from "react";
+import React, { useRef, useState, useEffect, ReactNode } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import gsap from "gsap";
@@ -14,9 +14,13 @@ gsap.registerPlugin(ScrollTrigger, useGSAP);
 // ---- Concave-fan geometry (pure rotateY + uniform translateX) -------------
 const VISIBLE_COUNT = 7;
 const STEP_DEG = 22;
-const CARD_W = 240;
-const CARD_H = 360;
-const CARD_SPACING = 224;
+
+function getCardConfig(width?: number) {
+  const w = width ?? (typeof window !== "undefined" ? window.innerWidth : 1200);
+  if (w < 640) return { w: 130, h: 195, spacing: 112 };
+  if (w < 1024) return { w: 185, h: 278, spacing: 168 };
+  return { w: 240, h: 360, spacing: 224 };
+}
 
 // Hero height and scroll distance for card spread
 const HERO_HEIGHT = "140vh";
@@ -27,10 +31,10 @@ const prefersReducedMotion = () =>
   window.matchMedia &&
   window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-function arcTargetForIndex(idx: number) {
+function arcTargetForIndex(idx: number, spacing: number) {
   const offset = idx - Math.floor(VISIBLE_COUNT / 2);
   return {
-    x: offset * CARD_SPACING,
+    x: offset * spacing,
     rotateY: -offset * STEP_DEG,
   };
 }
@@ -72,6 +76,14 @@ export function PulseFitHero({
   disclaimer,
   className,
 }: PulseFitHeroProps) {
+  const [cardCfg, setCardCfg] = useState(getCardConfig);
+
+  useEffect(() => {
+    const onResize = () => setCardCfg(getCardConfig(window.innerWidth));
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+
   // wrapperRef: tall outer div — the ScrollTrigger trigger
   const wrapperRef = useRef<HTMLDivElement>(null);
   // containerRef: sticky inner div — the GSAP scope
@@ -88,7 +100,7 @@ export function PulseFitHero({
       const els = cardRefs.current.filter(Boolean) as HTMLDivElement[];
       if (els.length !== VISIBLE_COUNT || !wrapperRef.current) return;
 
-      const targets = els.map((_, idx) => arcTargetForIndex(idx));
+      const targets = els.map((_, idx) => arcTargetForIndex(idx, cardCfg.spacing));
 
       if (prefersReducedMotion()) {
         els.forEach((el, idx) => gsap.set(el, targets[idx]));
@@ -122,7 +134,7 @@ export function PulseFitHero({
         );
       });
     },
-    { scope: containerRef, dependencies: [cards.length] }
+    { scope: containerRef, dependencies: [cards.length, cardCfg] }
   );
 
   return (
@@ -175,7 +187,7 @@ export function PulseFitHero({
         <div
           className="relative w-full flex items-center justify-center"
           style={{
-            height: CARD_H + 40,
+            height: cardCfg.h + 40,
             perspective: "1200px",
             perspectiveOrigin: "50% 50%",
           }}
@@ -183,8 +195,8 @@ export function PulseFitHero({
           <div
             className="relative"
             style={{
-              width: CARD_W,
-              height: CARD_H,
+              width: cardCfg.w,
+              height: cardCfg.h,
               transformStyle: "preserve-3d",
             }}
           >
@@ -196,6 +208,8 @@ export function PulseFitHero({
                   key={idx}
                   program={program}
                   zIndex={z}
+                  cardW={cardCfg.w}
+                  cardH={cardCfg.h}
                   refCb={(el) => {
                     cardRefs.current[idx] = el;
                   }}
@@ -234,18 +248,20 @@ export function PulseFitHero({
 interface CurvedCardProps {
   program: Program;
   zIndex: number;
+  cardW: number;
+  cardH: number;
   refCb: (el: HTMLDivElement | null) => void;
 }
 
-function CurvedCard({ program, zIndex, refCb }: CurvedCardProps) {
+function CurvedCard({ program, zIndex, cardW, cardH, refCb }: CurvedCardProps) {
   if (!program) return null;
   return (
     <div
       ref={refCb}
       className="absolute top-0 left-0 rounded-[22px] overflow-hidden shadow-xl"
       style={{
-        width: CARD_W,
-        height: CARD_H,
+        width: cardW,
+        height: cardH,
         zIndex,
         transformStyle: "preserve-3d",
         willChange: "transform",

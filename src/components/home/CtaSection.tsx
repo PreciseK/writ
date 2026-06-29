@@ -23,8 +23,8 @@ const ORBIT_DURATION = 50; // seconds per full revolution
 
 function getOrbitConfig(width?: number) {
   const w = width ?? (typeof window !== "undefined" ? window.innerWidth : 1200);
-  if (w < 640) return { radius: 340, pivotY: 480, sectionH: 680, imgW: 110, imgH: 150 };
-  if (w < 1024) return { radius: 700, pivotY: 900, sectionH: 800, imgW: 140, imgH: 190 };
+  if (w < 640) return { radius: 210, pivotY: 340, sectionH: 520, imgW: 80, imgH: 108 };
+  if (w < 1024) return { radius: 620, pivotY: 820, sectionH: 760, imgW: 130, imgH: 175 };
   return { radius: 1100, pivotY: 1220, sectionH: 800, imgW: 170, imgH: 230 };
 }
 
@@ -76,7 +76,7 @@ const CtaSection = () => {
 
   return (
     <section
-      className="relative overflow-hidden bg-[#F5F0E6] flex flex-col items-center justify-end pb-28"
+      className="relative overflow-hidden bg-[#F5F0E6] flex flex-col items-center justify-end pb-14 md:pb-28"
       style={{ height: sectionH }}
     >
       {/* Images — each anchored at section centre, moved by JS translate */}
@@ -103,7 +103,7 @@ const CtaSection = () => {
 
       {/* Content */}
       <div className="relative z-10 text-center max-w-lg mx-auto px-6">
-        <h2 className="text-5xl font-bold text-gray-900 leading-tight mb-4 mt-8">
+        <h2 className="text-3xl md:text-5xl font-bold text-gray-900 leading-tight mb-4 mt-6 md:mt-8">
           Let's discuss your
           <br />
           <span

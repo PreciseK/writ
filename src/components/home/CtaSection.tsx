@@ -12,8 +12,7 @@ const BASE_PEOPLE = [
   'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=300&h=420&q=80',
   'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=300&h=420&q=80',
 ];
-const BASE_TILTS  = [-4, 5, -2, 6, -3, 4, -6];
-const MOBILE_ROTS = [-10, -4, 0, 4, 10];
+const BASE_TILTS = [-4, 5, -2, 6, -3, 4, -6];
 
 const N_REPEATS = 5;
 const people = Array.from({ length: N_REPEATS }, () => BASE_PEOPLE).flat();
@@ -22,37 +21,32 @@ const TOTAL  = people.length;
 
 const ORBIT_DURATION = 50;
 
-function getOrbitConfig(width?: number) {
-  const w = width ?? (typeof window !== "undefined" ? window.innerWidth : 1200);
-  if (w < 1024) return { radius: 620, pivotY: 820, sectionH: 760, imgW: 130, imgH: 175 };
-  return { radius: 1100, pivotY: 1220, sectionH: 800, imgW: 170, imgH: 230 };
+// On mobile, pivotY is set very high (100px from section top) so the orbit
+// centre sits well above section centre (DY = 100 − sectionH/2 = −250).
+// This keeps all visible images in the top ~230 px, leaving the text clear.
+function getOrbitConfig(width = 1200) {
+  if (width < 640)  return { radius: 140, pivotY: 100,  sectionH: 700, imgW: 82,  imgH: 110 };
+  if (width < 1024) return { radius: 620, pivotY: 820,  sectionH: 760, imgW: 130, imgH: 175 };
+  return               { radius: 1100, pivotY: 1220, sectionH: 800, imgW: 170, imgH: 230 };
 }
 
 const CtaSection = () => {
-  const router   = useRouter();
-  const refs     = useRef<(HTMLDivElement | null)[]>([]);
-  const rafId    = useRef<number>(0);
-  const startTs  = useRef<number>(0);
-  // SSR-safe: always start with desktop defaults so server/client HTML matches,
-  // then correct to actual screen size after hydration in useEffect.
-  const orbitRef = useRef(getOrbitConfig(1200));
-
+  const router  = useRouter();
+  const refs    = useRef<(HTMLDivElement | null)[]>([]);
+  const rafId   = useRef<number>(0);
+  const startTs = useRef<number>(0);
+  // SSR-safe desktop defaults — corrected after hydration in useEffect
+  const orbitRef = useRef(getOrbitConfig());
   const [imgSize, setImgSize]   = useState({ w: 170, h: 230 });
   const [sectionH, setSectionH] = useState(800);
-  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     const update = (w: number) => {
-      const mobile = w < 640;
-      setIsMobile(mobile);
-      if (!mobile) {
-        const cfg = getOrbitConfig(w);
-        orbitRef.current = cfg;
-        setImgSize({ w: cfg.imgW, h: cfg.imgH });
-        setSectionH(cfg.sectionH);
-      }
+      const cfg = getOrbitConfig(w);
+      orbitRef.current = cfg;
+      setImgSize({ w: cfg.imgW, h: cfg.imgH });
+      setSectionH(cfg.sectionH);
     };
-
     update(window.innerWidth);
     const onResize = () => update(window.innerWidth);
     window.addEventListener("resize", onResize);
@@ -60,11 +54,6 @@ const CtaSection = () => {
   }, []);
 
   useEffect(() => {
-    if (isMobile) {
-      cancelAnimationFrame(rafId.current);
-      return;
-    }
-
     const tick = (now: number) => {
       if (!startTs.current) startTs.current = now;
       const elapsed = (now - startTs.current) / 1000;
@@ -81,65 +70,40 @@ const CtaSection = () => {
         el.style.transform =
           `translate(calc(-50% + ${x}px), calc(-50% + ${y}px)) rotate(${tilts[i]}deg)`;
       }
-
       rafId.current = requestAnimationFrame(tick);
     };
 
     rafId.current = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(rafId.current);
-  }, [isMobile]);
+  }, []);
 
   return (
     <section
-      className="relative overflow-hidden bg-[#F5F0E6] flex flex-col items-center"
-      style={isMobile ? undefined : { height: sectionH }}
+      className="relative overflow-hidden bg-[#F5F0E6] flex flex-col items-center justify-end pb-16 md:pb-28"
+      style={{ height: sectionH }}
     >
-      {isMobile ? (
-        /* Mobile: static fan of portrait images */
-        <div className="flex justify-center items-end gap-[7px] pt-10 px-4 flex-shrink-0">
-          {BASE_PEOPLE.slice(0, 5).map((src, i) => (
-            <img
-              key={i}
-              src={src}
-              alt=""
-              style={{
-                width: 60,
-                height: 82,
-                objectFit: 'cover',
-                borderRadius: 10,
-                transform: `rotate(${MOBILE_ROTS[i]}deg)`,
-                boxShadow: '0 3px 12px rgba(0,0,0,0.2)',
-                flexShrink: 0,
-              }}
-            />
-          ))}
+      {people.map((src, i) => (
+        <div
+          key={i}
+          ref={el => { refs.current[i] = el; }}
+          style={{ position: 'absolute', left: '50%', top: '50%' }}
+        >
+          <img
+            src={src}
+            alt=""
+            style={{
+              width: imgSize.w,
+              height: imgSize.h,
+              objectFit: 'cover',
+              borderRadius: 16,
+              boxShadow: '0 6px 24px rgba(0,0,0,0.18)',
+              display: 'block',
+            }}
+          />
         </div>
-      ) : (
-        /* Desktop/tablet: orbit animation */
-        people.map((src, i) => (
-          <div
-            key={i}
-            ref={el => { refs.current[i] = el; }}
-            style={{ position: 'absolute', left: '50%', top: '50%' }}
-          >
-            <img
-              src={src}
-              alt=""
-              style={{
-                width: imgSize.w,
-                height: imgSize.h,
-                objectFit: 'cover',
-                borderRadius: 20,
-                boxShadow: '0 6px 24px rgba(0,0,0,0.18)',
-                display: 'block',
-              }}
-            />
-          </div>
-        ))
-      )}
+      ))}
 
-      {/* Content */}
-      <div className={`relative z-10 text-center max-w-lg mx-auto px-6 ${isMobile ? 'mt-8 pb-12' : 'pb-28'}`}>
+      <div className="relative z-10 text-center max-w-lg mx-auto px-6">
         <h2 className="text-3xl md:text-5xl font-bold text-gray-900 leading-tight mb-3 md:mb-4">
           Let's discuss your
           <br />

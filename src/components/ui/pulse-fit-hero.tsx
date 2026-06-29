@@ -17,7 +17,7 @@ const STEP_DEG = 22;
 
 function getCardConfig(width?: number) {
   const w = width ?? (typeof window !== "undefined" ? window.innerWidth : 1200);
-  if (w < 640) return { w: 78, h: 116, spacing: 68, heroHeight: "100vh" };
+  if (w < 640) return { w: 78, h: 116, spacing: 68, heroHeight: "120vh" };
   if (w < 1024) return { w: 170, h: 255, spacing: 155, heroHeight: "125vh" };
   return { w: 240, h: 360, spacing: 224, heroHeight: "140vh" };
 }
@@ -146,7 +146,7 @@ export function PulseFitHero({
       <div
         ref={containerRef}
         className={cn(
-          "sticky top-0 w-full overflow-hidden flex flex-col items-center pt-20 md:pt-44 lg:pt-56 pb-10 md:pb-16 bg-[#FDFBF7]",
+          "sticky top-0 w-full overflow-hidden flex flex-col items-center pt-32 md:pt-44 lg:pt-56 pb-10 md:pb-16 bg-[#FDFBF7]",
           className
         )}
         style={{ height: cardCfg.heroHeight }}

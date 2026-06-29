@@ -14,6 +14,9 @@ const Footer = () => {
             <a href="mailto:hello@wagertechnik.de" className="text-[15px] text-[#64748b] hover:text-[#0f172a] mt-4 block">
               hello@wagertechnik.de
             </a>
+            <a href="tel:015127172196" className="text-[15px] text-[#64748b] hover:text-[#0f172a] mt-2 block">
+              015127172196
+            </a>
           </div>
 
           <div>
@@ -44,7 +47,7 @@ const Footer = () => {
         </div>
 
         <div className="pt-8 flex flex-col md:flex-row justify-between items-center text-[14px] text-[#64748b] gap-4">
-          <p>© 2025 Wager Technik. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} Wager Technik. All rights reserved.</p>
           <p>
             Designed by{' '}
             <a 

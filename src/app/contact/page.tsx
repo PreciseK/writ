@@ -4,7 +4,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import PageTransition from '@/components/PageTransition';
 import PageHero from '@/components/ui/page-hero';
-import { Mail, MapPin } from 'lucide-react';
+import { Mail, MapPin, Phone } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { HeroBackground } from '@/components/ui/hero-background';
 
@@ -38,6 +38,18 @@ const Contact = () => {
                     <h4 className="font-semibold text-foreground mb-1">Email Us</h4>
                     <a href="mailto:hello@wagertechnik.de" className="text-muted-foreground text-[15px] hover:text-foreground transition-colors">
                       hello@wagertechnik.de
+                    </a>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-5">
+                  <div className="w-12 h-12 rounded-[8px] bg-[#f8fafc] flex items-center justify-center flex-shrink-0 border border-border">
+                    <Phone className="w-5 h-5 text-primary" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-foreground mb-1">Phone</h4>
+                    <a href="tel:015127172196" className="text-muted-foreground text-[15px] hover:text-foreground transition-colors">
+                      015127172196
                     </a>
                   </div>
                 </div>

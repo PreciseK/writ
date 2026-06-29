@@ -12,43 +12,56 @@ const BASE_PEOPLE = [
   'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=300&h=420&q=80',
   'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=300&h=420&q=80',
 ];
-const BASE_TILTS = [-4, 5, -2, 6, -3, 4, -6];
+const BASE_TILTS  = [-4, 5, -2, 6, -3, 4, -6];
+const MOBILE_ROTS = [-10, -4, 0, 4, 10];
 
 const N_REPEATS = 5;
 const people = Array.from({ length: N_REPEATS }, () => BASE_PEOPLE).flat();
 const tilts  = Array.from({ length: N_REPEATS }, () => BASE_TILTS).flat();
-const TOTAL  = people.length; // 35
+const TOTAL  = people.length;
 
-const ORBIT_DURATION = 50; // seconds per full revolution
+const ORBIT_DURATION = 50;
 
 function getOrbitConfig(width?: number) {
   const w = width ?? (typeof window !== "undefined" ? window.innerWidth : 1200);
-  if (w < 640) return { radius: 210, pivotY: 340, sectionH: 520, imgW: 80, imgH: 108 };
   if (w < 1024) return { radius: 620, pivotY: 820, sectionH: 760, imgW: 130, imgH: 175 };
   return { radius: 1100, pivotY: 1220, sectionH: 800, imgW: 170, imgH: 230 };
 }
 
 const CtaSection = () => {
-  const router      = useRouter();
-  const refs        = useRef<(HTMLDivElement | null)[]>([]);
-  const rafId       = useRef<number>(0);
-  const startTs     = useRef<number>(0);
-  const orbitRef    = useRef(getOrbitConfig());
+  const router   = useRouter();
+  const refs     = useRef<(HTMLDivElement | null)[]>([]);
+  const rafId    = useRef<number>(0);
+  const startTs  = useRef<number>(0);
+  const orbitRef = useRef(getOrbitConfig());
+
   const [imgSize, setImgSize]   = useState({ w: orbitRef.current.imgW, h: orbitRef.current.imgH });
   const [sectionH, setSectionH] = useState(orbitRef.current.sectionH);
+  const [isMobile, setIsMobile] = useState(() =>
+    typeof window !== "undefined" ? window.innerWidth < 640 : false
+  );
 
   useEffect(() => {
     const onResize = () => {
-      const cfg = getOrbitConfig(window.innerWidth);
-      orbitRef.current = cfg;
-      setImgSize({ w: cfg.imgW, h: cfg.imgH });
-      setSectionH(cfg.sectionH);
+      const w = window.innerWidth;
+      setIsMobile(w < 640);
+      if (w >= 640) {
+        const cfg = getOrbitConfig(w);
+        orbitRef.current = cfg;
+        setImgSize({ w: cfg.imgW, h: cfg.imgH });
+        setSectionH(cfg.sectionH);
+      }
     };
     window.addEventListener("resize", onResize);
     return () => window.removeEventListener("resize", onResize);
   }, []);
 
   useEffect(() => {
+    if (isMobile) {
+      cancelAnimationFrame(rafId.current);
+      return;
+    }
+
     const tick = (now: number) => {
       if (!startTs.current) startTs.current = now;
       const elapsed = (now - startTs.current) / 1000;
@@ -62,7 +75,6 @@ const CtaSection = () => {
         const a = (2 * Math.PI * i / TOTAL) + base;
         const x = (radius * Math.sin(a)).toFixed(2);
         const y = (dy - radius * Math.cos(a)).toFixed(2);
-        // Pure translate keeps each card upright; tilt is a fixed decorative rotation
         el.style.transform =
           `translate(calc(-50% + ${x}px), calc(-50% + ${y}px)) rotate(${tilts[i]}deg)`;
       }
@@ -72,38 +84,60 @@ const CtaSection = () => {
 
     rafId.current = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(rafId.current);
-  }, []);
+  }, [isMobile]);
 
   return (
     <section
-      className="relative overflow-hidden bg-[#F5F0E6] flex flex-col items-center justify-end pb-14 md:pb-28"
-      style={{ height: sectionH }}
+      className="relative overflow-hidden bg-[#F5F0E6] flex flex-col items-center"
+      style={isMobile ? undefined : { height: sectionH }}
     >
-      {/* Images — each anchored at section centre, moved by JS translate */}
-      {people.map((src, i) => (
-        <div
-          key={i}
-          ref={el => { refs.current[i] = el; }}
-          style={{ position: 'absolute', left: '50%', top: '50%' }}
-        >
-          <img
-            src={src}
-            alt=""
-            style={{
-              width: imgSize.w,
-              height: imgSize.h,
-              objectFit: 'cover',
-              borderRadius: 20,
-              boxShadow: '0 6px 24px rgba(0,0,0,0.18)',
-              display: 'block',
-            }}
-          />
+      {isMobile ? (
+        /* Mobile: static fan of portrait images */
+        <div className="flex justify-center items-end gap-[7px] pt-10 px-4 flex-shrink-0">
+          {BASE_PEOPLE.slice(0, 5).map((src, i) => (
+            <img
+              key={i}
+              src={src}
+              alt=""
+              style={{
+                width: 60,
+                height: 82,
+                objectFit: 'cover',
+                borderRadius: 10,
+                transform: `rotate(${MOBILE_ROTS[i]}deg)`,
+                boxShadow: '0 3px 12px rgba(0,0,0,0.2)',
+                flexShrink: 0,
+              }}
+            />
+          ))}
         </div>
-      ))}
+      ) : (
+        /* Desktop/tablet: orbit animation */
+        people.map((src, i) => (
+          <div
+            key={i}
+            ref={el => { refs.current[i] = el; }}
+            style={{ position: 'absolute', left: '50%', top: '50%' }}
+          >
+            <img
+              src={src}
+              alt=""
+              style={{
+                width: imgSize.w,
+                height: imgSize.h,
+                objectFit: 'cover',
+                borderRadius: 20,
+                boxShadow: '0 6px 24px rgba(0,0,0,0.18)',
+                display: 'block',
+              }}
+            />
+          </div>
+        ))
+      )}
 
       {/* Content */}
-      <div className="relative z-10 text-center max-w-lg mx-auto px-6">
-        <h2 className="text-3xl md:text-5xl font-bold text-gray-900 leading-tight mb-4 mt-6 md:mt-8">
+      <div className={`relative z-10 text-center max-w-lg mx-auto px-6 ${isMobile ? 'mt-8 pb-12' : 'pb-28'}`}>
+        <h2 className="text-3xl md:text-5xl font-bold text-gray-900 leading-tight mb-3 md:mb-4">
           Let's discuss your
           <br />
           <span
@@ -114,7 +148,7 @@ const CtaSection = () => {
           </span>
         </h2>
 
-        <p className="text-gray-500 text-base leading-relaxed mb-10 max-w-sm mx-auto">
+        <p className="text-gray-500 text-sm md:text-base leading-relaxed mb-6 md:mb-10 max-w-sm mx-auto">
           Partner with a team that takes full accountability for delivery quality,
           technical oversight, and outcomes.
         </p>

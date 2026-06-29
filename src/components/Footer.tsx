@@ -11,8 +11,8 @@ const Footer = () => {
             <img src="/logo.png" alt="Wager Technik" className="h-8 w-auto mb-6" />
             <p className="text-[15px] text-[#64748b] mb-2">Schwalbenweg 11</p>
             <p className="text-[15px] text-[#64748b] mb-2">72356 Dautmergen, Germany</p>
-            <a href="mailto:hello@wagertechnik.de" className="text-[15px] text-[#64748b] hover:text-[#0f172a] mt-4 block">
-              hello@wagertechnik.de
+            <a href="mailto:hello@wager-technik.de" className="text-[15px] text-[#64748b] hover:text-[#0f172a] mt-4 block">
+              hello@wager-technik.de
             </a>
             <a href="tel:015127172196" className="text-[15px] text-[#64748b] hover:text-[#0f172a] mt-2 block">
               015127172196

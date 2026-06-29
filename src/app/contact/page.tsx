@@ -36,8 +36,8 @@ const Contact = () => {
                   </div>
                   <div>
                     <h4 className="font-semibold text-foreground mb-1">Email Us</h4>
-                    <a href="mailto:hello@wagertechnik.de" className="text-muted-foreground text-[15px] hover:text-foreground transition-colors">
-                      hello@wagertechnik.de
+                    <a href="mailto:hello@wager-technik.de" className="text-muted-foreground text-[15px] hover:text-foreground transition-colors">
+                      hello@wager-technik.de
                     </a>
                   </div>
                 </div>

@@ -75,9 +75,12 @@ export function PulseFitHero({
   disclaimer,
   className,
 }: PulseFitHeroProps) {
-  const [cardCfg, setCardCfg] = useState(getCardConfig);
+  // SSR-safe: always start with desktop defaults so server/client HTML matches,
+  // then correct to actual screen size after hydration in useEffect.
+  const [cardCfg, setCardCfg] = useState({ w: 240, h: 360, spacing: 224, heroHeight: "140vh" });
 
   useEffect(() => {
+    setCardCfg(getCardConfig(window.innerWidth));
     const onResize = () => setCardCfg(getCardConfig(window.innerWidth));
     window.addEventListener("resize", onResize);
     return () => window.removeEventListener("resize", onResize);

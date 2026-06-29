@@ -33,25 +33,28 @@ const CtaSection = () => {
   const refs     = useRef<(HTMLDivElement | null)[]>([]);
   const rafId    = useRef<number>(0);
   const startTs  = useRef<number>(0);
-  const orbitRef = useRef(getOrbitConfig());
+  // SSR-safe: always start with desktop defaults so server/client HTML matches,
+  // then correct to actual screen size after hydration in useEffect.
+  const orbitRef = useRef(getOrbitConfig(1200));
 
-  const [imgSize, setImgSize]   = useState({ w: orbitRef.current.imgW, h: orbitRef.current.imgH });
-  const [sectionH, setSectionH] = useState(orbitRef.current.sectionH);
-  const [isMobile, setIsMobile] = useState(() =>
-    typeof window !== "undefined" ? window.innerWidth < 640 : false
-  );
+  const [imgSize, setImgSize]   = useState({ w: 170, h: 230 });
+  const [sectionH, setSectionH] = useState(800);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    const onResize = () => {
-      const w = window.innerWidth;
-      setIsMobile(w < 640);
-      if (w >= 640) {
+    const update = (w: number) => {
+      const mobile = w < 640;
+      setIsMobile(mobile);
+      if (!mobile) {
         const cfg = getOrbitConfig(w);
         orbitRef.current = cfg;
         setImgSize({ w: cfg.imgW, h: cfg.imgH });
         setSectionH(cfg.sectionH);
       }
     };
+
+    update(window.innerWidth);
+    const onResize = () => update(window.innerWidth);
     window.addEventListener("resize", onResize);
     return () => window.removeEventListener("resize", onResize);
   }, []);

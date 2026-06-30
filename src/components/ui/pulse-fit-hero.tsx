@@ -146,7 +146,7 @@ export function PulseFitHero({
       <div
         ref={containerRef}
         className={cn(
-          "sticky top-0 w-full overflow-hidden flex flex-col items-center pt-20 md:pt-44 lg:pt-56 pb-4 md:pb-16 bg-[#FDFBF7]",
+          "sticky top-0 w-full overflow-hidden flex flex-col items-center justify-center md:justify-start pt-16 md:pt-44 lg:pt-56 pb-16 md:pb-16 bg-[#FDFBF7]",
           className
         )}
         style={{ height: cardCfg.heroHeight }}

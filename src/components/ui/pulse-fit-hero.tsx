@@ -17,13 +17,13 @@ const STEP_DEG = 22;
 
 function getCardConfig(width?: number) {
   const w = width ?? (typeof window !== "undefined" ? window.innerWidth : 1200);
-  if (w < 640) return { w: 78, h: 116, spacing: 68, heroHeight: "120vh" };
-  if (w < 1024) return { w: 170, h: 255, spacing: 155, heroHeight: "125vh" };
-  return { w: 240, h: 360, spacing: 224, heroHeight: "140vh" };
+  // scrollDist controls how far the user scrolls before WhatWeDoSection appears.
+  // Mobile uses 60vh so the sticky hero exits quickly; desktop keeps 140vh for
+  // the full cinematic spread feel.
+  if (w < 640)  return { w: 78,  h: 116, spacing: 68,  heroHeight: "120vh", scrollDist: "60vh"  };
+  if (w < 1024) return { w: 170, h: 255, spacing: 155, heroHeight: "125vh", scrollDist: "100vh" };
+  return               { w: 240, h: 360, spacing: 224, heroHeight: "140vh", scrollDist: "140vh" };
 }
-
-// Scroll distance for card spread animation
-const SCROLL_DISTANCE = "140vh";
 
 const prefersReducedMotion = () =>
   typeof window !== "undefined" &&
@@ -77,7 +77,7 @@ export function PulseFitHero({
 }: PulseFitHeroProps) {
   // SSR-safe: always start with desktop defaults so server/client HTML matches,
   // then correct to actual screen size after hydration in useEffect.
-  const [cardCfg, setCardCfg] = useState({ w: 240, h: 360, spacing: 224, heroHeight: "140vh" });
+  const [cardCfg, setCardCfg] = useState({ w: 240, h: 360, spacing: 224, heroHeight: "140vh", scrollDist: "140vh" });
 
   useEffect(() => {
     setCardCfg(getCardConfig(window.innerWidth));
@@ -117,7 +117,7 @@ export function PulseFitHero({
           // pinned natively; GSAP just drives the card spread animation.
           trigger: wrapperRef.current,
           start: "top top",
-          end: `+=${SCROLL_DISTANCE}`,
+          end: `+=${cardCfg.scrollDist}`,
           scrub: 0.5,
           fastScrollEnd: true,
           invalidateOnRefresh: true,
@@ -142,7 +142,7 @@ export function PulseFitHero({
   return (
     // Outer wrapper: tall enough for hero + full card-spread scroll distance.
     // CSS sticky on the inner div does the pinning — no GSAP pin needed.
-    <div ref={wrapperRef} style={{ minHeight: `calc(${cardCfg.heroHeight} + ${SCROLL_DISTANCE})` }}>
+    <div ref={wrapperRef} style={{ minHeight: `calc(${cardCfg.heroHeight} + ${cardCfg.scrollDist})` }}>
       <div
         ref={containerRef}
         className={cn(

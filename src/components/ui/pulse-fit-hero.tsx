@@ -20,7 +20,7 @@ function getCardConfig(width?: number) {
   // scrollDist controls how far the user scrolls before WhatWeDoSection appears.
   // Mobile uses 60vh so the sticky hero exits quickly; desktop keeps 140vh for
   // the full cinematic spread feel.
-  if (w < 640)  return { w: 78,  h: 116, spacing: 68,  heroHeight: "120vh", scrollDist: "60vh"  };
+  if (w < 640)  return { w: 78,  h: 116, spacing: 68,  heroHeight: "100vh", scrollDist: "60vh"  };
   if (w < 1024) return { w: 170, h: 255, spacing: 155, heroHeight: "125vh", scrollDist: "100vh" };
   return               { w: 240, h: 360, spacing: 224, heroHeight: "140vh", scrollDist: "140vh" };
 }
@@ -77,7 +77,7 @@ export function PulseFitHero({
 }: PulseFitHeroProps) {
   // SSR-safe: always start with desktop defaults so server/client HTML matches,
   // then correct to actual screen size after hydration in useEffect.
-  const [cardCfg, setCardCfg] = useState({ w: 240, h: 360, spacing: 224, heroHeight: "140vh", scrollDist: "140vh" });
+  const [cardCfg, setCardCfg] = useState({ w: 240, h: 360, spacing: 224, heroHeight: "140vh", scrollDist: "140vh" }); // desktop defaults for SSR
 
   useEffect(() => {
     setCardCfg(getCardConfig(window.innerWidth));
@@ -146,7 +146,7 @@ export function PulseFitHero({
       <div
         ref={containerRef}
         className={cn(
-          "sticky top-0 w-full overflow-hidden flex flex-col items-center pt-32 md:pt-44 lg:pt-56 pb-10 md:pb-16 bg-[#FDFBF7]",
+          "sticky top-0 w-full overflow-hidden flex flex-col items-center pt-20 md:pt-44 lg:pt-56 pb-4 md:pb-16 bg-[#FDFBF7]",
           className
         )}
         style={{ height: cardCfg.heroHeight }}
@@ -154,15 +154,15 @@ export function PulseFitHero({
         <HeroBackground />
 
         {/* Title — full width, outside constrained block */}
-        <div className="w-full z-10 mb-6">
+        <div className="w-full z-10 mb-3 md:mb-6">
           <h1 className="w-full text-4xl md:text-5xl lg:text-6xl tracking-tight text-[#111827] font-normal leading-[1.1]">
             {title}
           </h1>
         </div>
 
         {/* Subtitle + CTAs */}
-        <div className="flex flex-col items-center text-center z-10 px-4 mb-6 md:mb-12 w-full">
-          <p className="text-lg md:text-xl text-[#4B5563] max-w-2xl mb-8">
+        <div className="flex flex-col items-center text-center z-10 px-4 mb-3 md:mb-12 w-full">
+          <p className="text-lg md:text-xl text-[#4B5563] max-w-2xl mb-4 md:mb-8">
             {subtitle}
           </p>
           <div className="flex flex-wrap items-center justify-center gap-4">

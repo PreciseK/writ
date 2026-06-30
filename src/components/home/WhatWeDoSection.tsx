@@ -5,7 +5,7 @@ import { HeroBackground } from '@/components/ui/hero-background';
 
 export default function WhatWeDoSection() {
   return (
-    <section className="relative overflow-hidden py-24 bg-[#FDFBF7]">
+    <section className="relative overflow-hidden pt-12 pb-24 md:py-24 bg-[#FDFBF7]">
       <HeroBackground />
       <div className="container-max">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">

@@ -1,17 +1,23 @@
 "use client";
 import React from 'react';
 import { motion } from 'framer-motion';
+import { useTranslations, useLocale } from 'next-intl';
 import Link from 'next/link';
 import { CheckCircle } from 'lucide-react';
 import { HeroBackground } from '@/components/ui/hero-background';
 
-const points = [
-  'Dedicated delivery teams',
-  'Defined responsibility and ownership',
-  'Clear accountability for outcomes',
-];
-
 const ModelTeaserSection = () => {
+  const t = useTranslations('modelTeaser');
+  const locale = useLocale();
+
+  const localePath = (path: string) => locale === 'de' ? `/de${path}` : path;
+
+  const points = [
+    t('point1'),
+    t('point2'),
+    t('point3'),
+  ];
+
   return (
     <section className="relative overflow-hidden py-24 bg-[#FDFBF7] border-t border-b border-border">
       <HeroBackground />
@@ -32,7 +38,7 @@ const ModelTeaserSection = () => {
               transition={{ duration: 0.6, ease: 'easeOut' }}
               viewport={{ once: false, amount: 0.2 }}
             >
-              Our Model
+              {t('title')}
             </motion.h2>
             <motion.p
               className="text-[18px] text-muted-foreground leading-relaxed mb-8"
@@ -41,8 +47,7 @@ const ModelTeaserSection = () => {
               transition={{ duration: 0.6, ease: 'easeOut', delay: 0.15 }}
               viewport={{ once: false, amount: 0.2 }}
             >
-              Wager Technik operates under a capacity-based subcontracting model.
-              We remain responsible for delivery and quality at all times.
+              {t('body')}
             </motion.p>
 
             <ul className="space-y-4 mb-10">
@@ -55,14 +60,14 @@ const ModelTeaserSection = () => {
             </ul>
 
             <p className="text-[15px] text-muted-foreground italic mb-10 border-l-2 border-border pl-4">
-              Wager Technik does not provide body leasing or staff augmentation services.
+              {t('disclaimer')}
             </p>
 
             <Link
-              href="/our-model"
+              href={localePath('/our-model')}
               className="inline-flex items-center gap-2 px-8 py-4 rounded-full border border-foreground text-foreground font-medium text-[16px] hover:bg-foreground hover:text-white transition-all"
             >
-              Learn More About Our Model
+              {t('cta')}
             </Link>
           </motion.div>
 

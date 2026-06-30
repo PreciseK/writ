@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
+import { useTranslations } from 'next-intl';
 import { Building2, Monitor, Server, Package } from 'lucide-react';
 import { HeroBackground } from '@/components/ui/hero-background';
 
@@ -15,34 +16,36 @@ const cardVariants = {
   visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.6, ease: 'easeOut' } },
 };
 
-const clients = [
-  {
-    label: 'IT Consultancies',
-    icon: Building2,
-    desc: 'Scale delivery without growing your headcount.',
-    image: 'https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=800&q=80',
-  },
-  {
-    label: 'Digital Agencies',
-    icon: Monitor,
-    desc: 'Ship client projects on time with accountable teams.',
-    image: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=800&q=80',
-  },
-  {
-    label: 'System Integrators',
-    icon: Server,
-    desc: 'Structured capacity for complex integration work.',
-    image: 'https://images.unsplash.com/photo-1573496130407-57329f01f769?auto=format&fit=crop&w=800&q=80',
-  },
-  {
-    label: 'SaaS Companies',
-    icon: Package,
-    desc: 'Engineering power for fast-growing product teams.',
-    image: 'https://images.unsplash.com/photo-1580894732444-8ecded7900cd?auto=format&fit=crop&w=800&q=80',
-  },
-];
-
 const WhoWeWorkWithSection = () => {
+  const t = useTranslations('whoWeWorkWith');
+
+  const clients = [
+    {
+      labelKey: 'itConsultancies',
+      descKey: 'itConsultanciesDesc',
+      icon: Building2,
+      image: 'https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=800&q=80',
+    },
+    {
+      labelKey: 'digitalAgencies',
+      descKey: 'digitalAgenciesDesc',
+      icon: Monitor,
+      image: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=800&q=80',
+    },
+    {
+      labelKey: 'systemIntegrators',
+      descKey: 'systemIntegratorsDesc',
+      icon: Server,
+      image: 'https://images.unsplash.com/photo-1573496130407-57329f01f769?auto=format&fit=crop&w=800&q=80',
+    },
+    {
+      labelKey: 'saasCompanies',
+      descKey: 'saasCompaniesDesc',
+      icon: Package,
+      image: 'https://images.unsplash.com/photo-1580894732444-8ecded7900cd?auto=format&fit=crop&w=800&q=80',
+    },
+  ];
+
   return (
     <section className="relative overflow-hidden py-24 bg-[#FDFBF7]">
       <HeroBackground />
@@ -53,9 +56,9 @@ const WhoWeWorkWithSection = () => {
           viewport={{ once: false, amount: 0.2 }}
           transition={{ duration: 0.5, ease: 'easeOut' }}
         >
-          <h2 className="text-[36px] font-normal text-foreground mb-4 tracking-tight">Who We Work With</h2>
+          <h2 className="text-[36px] font-normal text-foreground mb-4 tracking-tight">{t('title')}</h2>
           <p className="text-[18px] text-muted-foreground mb-16 max-w-xl leading-relaxed">
-            Partnering with teams where delivery pressure is real and deadlines matter.
+            {t('subtitle')}
           </p>
         </motion.div>
         <motion.div
@@ -65,9 +68,9 @@ const WhoWeWorkWithSection = () => {
           whileInView="visible"
           viewport={{ once: false, amount: 0.2 }}
         >
-          {clients.map(({ label, icon: Icon, desc, image }) => (
+          {clients.map(({ labelKey, descKey, icon: Icon, image }) => (
             <motion.div
-              key={label}
+              key={labelKey}
               variants={cardVariants}
               className="group relative overflow-hidden rounded-xl border border-border bg-muted/50 p-8 cursor-default transition-all duration-500 hover:border-transparent"
               style={{ minHeight: '320px' }}
@@ -86,10 +89,10 @@ const WhoWeWorkWithSection = () => {
                   <Icon className="w-5 h-5 text-white group-hover:text-primary transition-colors duration-500" />
                 </div>
                 <h3 className="text-[16px] font-semibold text-white group-hover:text-foreground mb-2 transition-colors duration-500">
-                  {label}
+                  {t(labelKey as any)}
                 </h3>
                 <p className="text-sm text-white/80 group-hover:text-muted-foreground leading-relaxed transition-colors duration-500">
-                  {desc}
+                  {t(descKey as any)}
                 </p>
               </div>
             </motion.div>
@@ -102,7 +105,7 @@ const WhoWeWorkWithSection = () => {
           viewport={{ once: false, amount: 0.2 }}
           transition={{ duration: 0.5, ease: 'easeOut', delay: 0.3 }}
         >
-          If deadlines and quality matter, Wager Technik fits.
+          {t('footer')}
         </motion.p>
       </div>
     </section>

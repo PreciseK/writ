@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
+import { useTranslations } from 'next-intl';
 import CtaSection from '@/components/home/CtaSection';
 import PageHero from '@/components/ui/page-hero';
 import PageTransition from '@/components/PageTransition';
@@ -34,12 +35,14 @@ const IconDot = ({ icon: Icon, bg = 'bg-white' }: { icon: LucideIcon; bg?: strin
 );
 
 const HowWeWork = () => {
+  const t = useTranslations('howWeWork');
+
   return (
     <PageTransition>
       <PageHero
-        label="Our Process"
-        title="How We Work"
-        subtitle="A proven, structured delivery model that integrates seamlessly into your business — balancing transparency with independent execution."
+        label={t('heroLabel')}
+        title={t('heroTitle')}
+        subtitle={t('heroSubtitle')}
       />
 
       {/* Section 1: Delivery Structure */}
@@ -53,10 +56,9 @@ const HowWeWork = () => {
               transition={{ duration: 0.7, ease: 'easeOut' }}
               viewport={{ once: false, amount: 0.2 }}
             >
-              <h2 className="text-[36px] font-normal text-foreground mb-4 tracking-tight">Delivery Structure</h2>
+              <h2 className="text-[36px] font-normal text-foreground mb-4 tracking-tight">{t('deliveryTitle')}</h2>
               <p className="text-[18px] text-muted-foreground mb-10 leading-relaxed">
-                We manage the complexities of software delivery so you don't have to.
-                You maintain vision and direction, while we handle execution.
+                {t('deliveryBody')}
               </p>
               <motion.div
                 className="space-y-8"
@@ -66,14 +68,14 @@ const HowWeWork = () => {
                 viewport={{ once: false, amount: 0.2 }}
               >
                 {[
-                  { icon: CheckCircle, title: 'Wager Technik Owns Delivery', body: 'We take complete responsibility for the development process, timeline, and the final output quality.' },
-                  { icon: Shield,      title: 'Client Collaborates',         body: 'You provide the goals and business context. We collaborate closely but spare you the daily management overhead.' },
-                ].map(({ icon, title, body }) => (
-                  <motion.div key={title} className="flex gap-4" variants={listItemVariants}>
+                  { icon: CheckCircle, titleKey: 'ownsDeliveryTitle', bodyKey: 'ownsDeliveryBody' },
+                  { icon: Shield,      titleKey: 'clientCollabTitle', bodyKey: 'clientCollabBody' },
+                ].map(({ icon, titleKey, bodyKey }) => (
+                  <motion.div key={titleKey} className="flex gap-4" variants={listItemVariants}>
                     <IconDot icon={icon} />
                     <div>
-                      <h4 className="font-semibold text-foreground mb-1">{title}</h4>
-                      <p className="text-muted-foreground text-[15px] leading-relaxed">{body}</p>
+                      <h4 className="font-semibold text-foreground mb-1">{t(titleKey as any)}</h4>
+                      <p className="text-muted-foreground text-[15px] leading-relaxed">{t(bodyKey as any)}</p>
                     </div>
                   </motion.div>
                 ))}
@@ -113,10 +115,9 @@ const HowWeWork = () => {
               transition={{ duration: 0.7, ease: 'easeOut', delay: 0.15 }}
               viewport={{ once: false, amount: 0.2 }}
             >
-              <h2 className="text-[36px] font-normal text-foreground mb-4 tracking-tight">Communication</h2>
+              <h2 className="text-[36px] font-normal text-foreground mb-4 tracking-tight">{t('commTitle')}</h2>
               <p className="text-[18px] text-muted-foreground mb-10 leading-relaxed">
-                Radical transparency and clear reporting ensure you always
-                know the exact status of your project without needing to ask.
+                {t('commBody')}
               </p>
               <motion.div
                 className="space-y-8"
@@ -126,15 +127,15 @@ const HowWeWork = () => {
                 viewport={{ once: false, amount: 0.2 }}
               >
                 {[
-                  { icon: RefreshCw, title: 'Weekly Updates', body: 'Regular syncs and concise updates on progress, current blockers, and upcoming next steps.' },
-                  { icon: BarChart2, title: 'Reporting',      body: 'Comprehensive sprint reports and metric-driven insights into team velocity and project health.' },
-                  { icon: Eye,       title: 'Transparency',   body: 'Open access to our agile boards, code repositories, and decision logs. No black boxes.' },
-                ].map(({ icon, title, body }) => (
-                  <motion.div key={title} className="flex gap-4" variants={listItemVariants}>
+                  { icon: RefreshCw, titleKey: 'weeklyUpdatesTitle', bodyKey: 'weeklyUpdatesBody' },
+                  { icon: BarChart2, titleKey: 'reportingTitle',     bodyKey: 'reportingBody' },
+                  { icon: Eye,       titleKey: 'transparencyTitle',  bodyKey: 'transparencyBody' },
+                ].map(({ icon, titleKey, bodyKey }) => (
+                  <motion.div key={titleKey} className="flex gap-4" variants={listItemVariants}>
                     <IconDot icon={icon} bg="bg-blue-50" />
                     <div>
-                      <h4 className="font-semibold text-foreground mb-1">{title}</h4>
-                      <p className="text-muted-foreground text-[15px] leading-relaxed">{body}</p>
+                      <h4 className="font-semibold text-foreground mb-1">{t(titleKey as any)}</h4>
+                      <p className="text-muted-foreground text-[15px] leading-relaxed">{t(bodyKey as any)}</p>
                     </div>
                   </motion.div>
                 ))}
@@ -154,10 +155,9 @@ const HowWeWork = () => {
             transition={{ duration: 0.6, ease: 'easeOut' }}
             viewport={{ once: false, amount: 0.2 }}
           >
-            <h2 className="text-[36px] font-normal text-foreground mb-4 tracking-tight">Quality Assurance</h2>
+            <h2 className="text-[36px] font-normal text-foreground mb-4 tracking-tight">{t('qaTitle')}</h2>
             <p className="text-[18px] text-muted-foreground mb-16 max-w-xl leading-relaxed">
-              Built-in engineering excellence applied rigorously at every stage of
-              the software development lifecycle.
+              {t('qaSubtitle')}
             </p>
           </motion.div>
           <motion.div
@@ -168,17 +168,17 @@ const HowWeWork = () => {
             viewport={{ once: false, amount: 0.15 }}
           >
             {[
-              { icon: Code,     title: 'Code Reviews',       body: 'Mandatory peer reviews ensure high maintainability, ironclad security, and strict adherence to industry best practices.' },
-              { icon: Eye,      title: 'Technical Oversight', body: 'Dedicated senior technical leaders actively oversee system architecture and resolve the most complex engineering challenges.' },
-              { icon: FileText, title: 'Standards',           body: 'Implementation of strict CI/CD pipelines, automated testing suites, and uniform coding standards across all projects.' },
-            ].map(({ icon: Icon, title, body }) => (
-              <motion.div key={title} variants={cardVariants}>
+              { icon: Code,     titleKey: 'codeReviewsTitle',  bodyKey: 'codeReviewsBody' },
+              { icon: Eye,      titleKey: 'techOversightTitle', bodyKey: 'techOversightBody' },
+              { icon: FileText, titleKey: 'standardsTitle',    bodyKey: 'standardsBody' },
+            ].map(({ icon: Icon, titleKey, bodyKey }) => (
+              <motion.div key={titleKey} variants={cardVariants}>
                 <Card variant="soft" className="p-8">
                   <div className="w-12 h-12 rounded-[8px] bg-primary flex items-center justify-center mb-6">
                     <Icon className="w-5 h-5 text-white" />
                   </div>
-                  <h3 className="text-lg font-semibold text-foreground mb-3">{title}</h3>
-                  <p className="text-muted-foreground leading-relaxed text-sm">{body}</p>
+                  <h3 className="text-lg font-semibold text-foreground mb-3">{t(titleKey as any)}</h3>
+                  <p className="text-muted-foreground leading-relaxed text-sm">{t(bodyKey as any)}</p>
                 </Card>
               </motion.div>
             ))}

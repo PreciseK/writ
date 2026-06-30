@@ -2,30 +2,8 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
+import { useTranslations } from 'next-intl';
 import { HeroBackground } from '@/components/ui/hero-background';
-
-const steps = [
-  {
-    num: '01',
-    title: 'Capacity-Based Engagement',
-    desc: 'Defined delivery capacity with named team members.',
-  },
-  {
-    num: '02',
-    title: 'Wager Technik Owns Delivery',
-    desc: 'We manage technical direction, quality assurance, and execution.',
-  },
-  {
-    num: '03',
-    title: 'Transparent Communication',
-    desc: 'Weekly reporting, clear milestones, and a single German-speaking point of contact.',
-  },
-  {
-    num: '04',
-    title: 'Flexible Scaling',
-    desc: 'Adjust capacity as your needs evolve without long-term hiring commitments.',
-  },
-];
 
 const stepsContainerVariants = {
   hidden: {},
@@ -47,6 +25,15 @@ const stepItemVariants = {
 };
 
 const HowItWorksSection = () => {
+  const t = useTranslations('howItWorks');
+
+  const steps = [
+    { num: '01', title: t('step1Title'), desc: t('step1Desc') },
+    { num: '02', title: t('step2Title'), desc: t('step2Desc') },
+    { num: '03', title: t('step3Title'), desc: t('step3Desc') },
+    { num: '04', title: t('step4Title'), desc: t('step4Desc') },
+  ];
+
   return (
     <section className="relative overflow-hidden py-24 bg-[#FDFBF7]">
       <HeroBackground />
@@ -64,10 +51,10 @@ const HowItWorksSection = () => {
             viewport={{ once: false, amount: 0.2 }}
           >
             <h2 className="text-[42px] font-normal text-[#0f172a] leading-[1.15] tracking-tight">
-              How We<br />Work
+              {t('title')}
             </h2>
             <p className="mt-4 text-[17px] text-[#64748b] leading-relaxed max-w-xs">
-              A clear, low-risk delivery approach:
+              {t('subtitle')}
             </p>
             <div className="mt-8 rounded-[16px] overflow-hidden">
               <img

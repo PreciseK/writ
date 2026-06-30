@@ -5,20 +5,30 @@ import { useRouter, usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
-
-const links = [
-  { name: 'Services',     path: '/services' },
-  { name: 'Our Model',    path: '/our-model' },
-  { name: 'How We Work',  path: '/how-we-work' },
-  { name: 'About',        path: '/about' },
-];
+import { useTranslations, useLocale } from 'next-intl';
 
 const HomeNavbar = () => {
+  const t = useTranslations('nav');
+  const locale = useLocale();
+
+  const links = [
+    { name: t('services'),   path: '/services' },
+    { name: t('ourModel'),   path: '/our-model' },
+    { name: t('howWeWork'),  path: '/how-we-work' },
+    { name: t('about'),      path: '/about' },
+  ];
+
   const [scrolled, setScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useRouter();
   const pathname = usePathname();
-  const isHome = pathname === '/';
+
+  // Strip locale prefix for comparison
+  const pathnameWithoutLocale = pathname.startsWith('/de')
+    ? pathname.slice(3) || '/'
+    : pathname;
+
+  const isHome = pathnameWithoutLocale === '/';
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 80);
@@ -30,8 +40,16 @@ const HomeNavbar = () => {
   useEffect(() => { setIsOpen(false); }, [pathname]);
 
   const handleNav = (path: string) => {
-    navigate.push(path);
+    const newPath = locale === 'de' ? `/de${path}` : path;
+    navigate.push(newPath);
     setIsOpen(false);
+  };
+
+  const switchLocale = (newLocale: string) => {
+    const newPath = newLocale === 'de'
+      ? `/de${pathnameWithoutLocale}`
+      : pathnameWithoutLocale;
+    navigate.push(newPath);
   };
 
   // On inner pages always show the pill/solid state
@@ -71,17 +89,52 @@ const HomeNavbar = () => {
                 style={{
                   fontSize: '15px',
                   fontWeight: 400,
-                  color: pathname === item.path ? '#1a1a1a' : '#4a5568',
+                  color: pathnameWithoutLocale === item.path ? '#1a1a1a' : '#4a5568',
                   background: 'none',
                   border: 'none',
                   cursor: 'pointer',
-                  borderBottom: pathname === item.path ? '1px solid #1a1a1a' : 'none',
+                  borderBottom: pathnameWithoutLocale === item.path ? '1px solid #1a1a1a' : 'none',
                   paddingBottom: '2px',
                 }}
               >
                 {item.name}
               </button>
             ))}
+
+            {/* Language switcher */}
+            <div className="flex items-center gap-1 ml-2">
+              <button
+                onClick={() => switchLocale('en')}
+                style={{
+                  fontSize: '13px',
+                  fontWeight: locale === 'en' ? 600 : 400,
+                  opacity: locale === 'en' ? 1 : 0.45,
+                  background: 'none',
+                  border: 'none',
+                  cursor: 'pointer',
+                  color: '#1a1a1a',
+                  padding: '2px 0',
+                }}
+              >
+                EN
+              </button>
+              <span style={{ color: '#cbd5e1', fontSize: '13px', userSelect: 'none' }}>|</span>
+              <button
+                onClick={() => switchLocale('de')}
+                style={{
+                  fontSize: '13px',
+                  fontWeight: locale === 'de' ? 600 : 400,
+                  opacity: locale === 'de' ? 1 : 0.45,
+                  background: 'none',
+                  border: 'none',
+                  cursor: 'pointer',
+                  color: '#1a1a1a',
+                  padding: '2px 0',
+                }}
+              >
+                DE
+              </button>
+            </div>
           </nav>
 
           {/* Desktop CTA */}
@@ -99,7 +152,7 @@ const HomeNavbar = () => {
                 letterSpacing: '0.01em',
               }}
             >
-              Contact Us
+              {t('contact')}
             </button>
           </div>
 
@@ -137,8 +190,8 @@ const HomeNavbar = () => {
                     className="flex items-center w-full px-4 py-3 rounded-xl text-left transition-colors hover:bg-slate-50"
                     style={{
                       fontSize: '16px',
-                      fontWeight: pathname === item.path ? 500 : 400,
-                      color: pathname === item.path ? '#1a1a1a' : '#4a5568',
+                      fontWeight: pathnameWithoutLocale === item.path ? 500 : 400,
+                      color: pathnameWithoutLocale === item.path ? '#1a1a1a' : '#4a5568',
                       background: 'none',
                       border: 'none',
                       cursor: 'pointer',
@@ -147,6 +200,41 @@ const HomeNavbar = () => {
                     {item.name}
                   </button>
                 ))}
+              </div>
+
+              {/* Language switcher mobile */}
+              <div className="mx-4 border-t border-slate-100" />
+              <div className="px-4 py-3 flex items-center gap-3">
+                <span style={{ fontSize: '13px', color: '#94a3b8' }}>Language:</span>
+                <button
+                  onClick={() => { switchLocale('en'); setIsOpen(false); }}
+                  style={{
+                    fontSize: '13px',
+                    fontWeight: locale === 'en' ? 600 : 400,
+                    opacity: locale === 'en' ? 1 : 0.5,
+                    background: 'none',
+                    border: 'none',
+                    cursor: 'pointer',
+                    color: '#1a1a1a',
+                  }}
+                >
+                  EN
+                </button>
+                <span style={{ color: '#cbd5e1', fontSize: '13px' }}>|</span>
+                <button
+                  onClick={() => { switchLocale('de'); setIsOpen(false); }}
+                  style={{
+                    fontSize: '13px',
+                    fontWeight: locale === 'de' ? 600 : 400,
+                    opacity: locale === 'de' ? 1 : 0.5,
+                    background: 'none',
+                    border: 'none',
+                    cursor: 'pointer',
+                    color: '#1a1a1a',
+                  }}
+                >
+                  DE
+                </button>
               </div>
 
               {/* Divider */}
@@ -166,7 +254,7 @@ const HomeNavbar = () => {
                     cursor: 'pointer',
                   }}
                 >
-                  Contact Us
+                  {t('contact')}
                 </button>
               </div>
             </motion.div>

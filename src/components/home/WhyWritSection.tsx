@@ -2,30 +2,8 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
+import { useTranslations } from 'next-intl';
 import { Shield, Star, Users, Tag, Scale } from 'lucide-react';
-
-const FEATURES = [
-  {
-    icon: Shield,
-    text: 'German-facing accountability through Wager Technik',
-  },
-  {
-    icon: Star,
-    text: 'Strong technical leadership and delivery oversight',
-  },
-  {
-    icon: Users,
-    text: 'Carefully vetted and continuously reviewed teams',
-  },
-  {
-    icon: Tag,
-    text: 'Predictable pricing models',
-  },
-  {
-    icon: Scale,
-    text: 'A legally sound subcontracting model designed for the German market',
-  },
-];
 
 const bulletContainerVariants = {
   hidden: {},
@@ -47,6 +25,16 @@ const bulletItemVariants = {
 };
 
 const WhyWritSection = () => {
+  const t = useTranslations('whyWrit');
+
+  const FEATURES = [
+    { icon: Shield, textKey: 'feature1' },
+    { icon: Star,   textKey: 'feature2' },
+    { icon: Users,  textKey: 'feature3' },
+    { icon: Tag,    textKey: 'feature4' },
+    { icon: Scale,  textKey: 'feature5' },
+  ];
+
   return (
     <section className="overflow-hidden bg-[#0f0f0f]">
       <div className="flex flex-col lg:flex-row min-h-[600px]">
@@ -78,10 +66,10 @@ const WhyWritSection = () => {
         >
           <div className="max-w-lg">
             <p className="text-xs font-semibold tracking-[0.2em] uppercase text-white/40 mb-4">
-              Why Wager Technik
+              {t('eyebrow')}
             </p>
             <h2 className="text-3xl lg:text-4xl font-bold text-white leading-snug mb-4">
-              Built for trust and long-term<br className="hidden lg:block" /> delivery partnerships
+              {t('title')}
             </h2>
             <div className="w-12 h-0.5 bg-white/20 mb-10" />
 
@@ -92,12 +80,12 @@ const WhyWritSection = () => {
               whileInView="visible"
               viewport={{ once: false, amount: 0.2 }}
             >
-              {FEATURES.map(({ icon: Icon, text }, i) => (
+              {FEATURES.map(({ icon: Icon, textKey }, i) => (
                 <motion.li key={i} className="flex items-start gap-4" variants={bulletItemVariants}>
                   <span className="mt-0.5 flex-shrink-0 w-9 h-9 rounded-lg bg-white/10 flex items-center justify-center">
                     <Icon className="w-4 h-4 text-white/80" strokeWidth={1.5} />
                   </span>
-                  <p className="text-white/70 text-[15px] leading-relaxed pt-1.5">{text}</p>
+                  <p className="text-white/70 text-[15px] leading-relaxed pt-1.5">{t(textKey as any)}</p>
                 </motion.li>
               ))}
             </motion.ul>

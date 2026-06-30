@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
+import { useTranslations } from 'next-intl';
 import CtaSection from '@/components/home/CtaSection';
 import PageHero from '@/components/ui/page-hero';
 import PageTransition from '@/components/PageTransition';
@@ -34,12 +35,14 @@ const IconDot = ({ icon: Icon }: { icon: LucideIcon }) => (
 );
 
 const Services = () => {
+  const t = useTranslations('services');
+
   return (
     <PageTransition>
       <PageHero
-        label="What We Offer"
-        title="Our Services"
-        subtitle="Structured IT delivery, project execution, and technical leadership — designed to give you more capacity with less operational risk."
+        label={t('heroLabel')}
+        title={t('heroTitle')}
+        subtitle={t('heroSubtitle')}
       />
 
       {/* Section 1: Dedicated Delivery Teams */}
@@ -53,10 +56,9 @@ const Services = () => {
               transition={{ duration: 0.7, ease: 'easeOut' }}
               viewport={{ once: false, amount: 0.2 }}
             >
-              <h2 className="text-[36px] font-normal text-foreground mb-4 tracking-tight">Dedicated Delivery Teams</h2>
+              <h2 className="text-[36px] font-normal text-foreground mb-4 tracking-tight">{t('dedicatedTitle')}</h2>
               <p className="text-[18px] text-muted-foreground mb-10 leading-relaxed">
-                Fully formed engineering units integrated seamlessly into your workflow.
-                We take full ownership of the delivery process to drive continuous value.
+                {t('dedicatedBody')}
               </p>
               <motion.div
                 className="space-y-8"
@@ -66,15 +68,15 @@ const Services = () => {
                 viewport={{ once: false, amount: 0.2 }}
               >
                 {[
-                  { icon: Users,    title: 'What it is',   body: 'A cohesive team of vetted engineers, managed by Wager Technik, entirely focused on your technical objectives.' },
-                  { icon: Settings, title: 'How it works', body: 'We map your capacity needs, assemble the team, and take ongoing responsibility for the execution pipeline.' },
-                  { icon: Clock,    title: 'When to use',  body: 'Ideal for long-term product development or when you need to scale capacity quickly without the overhead of internal hiring.' },
-                ].map(({ icon, title, body }) => (
-                  <motion.div key={title} className="flex gap-4" variants={listItemVariants}>
+                  { icon: Users,    titleKey: 'dedicatedWhatTitle', bodyKey: 'dedicatedWhatBody' },
+                  { icon: Settings, titleKey: 'dedicatedHowTitle',  bodyKey: 'dedicatedHowBody' },
+                  { icon: Clock,    titleKey: 'dedicatedWhenTitle', bodyKey: 'dedicatedWhenBody' },
+                ].map(({ icon, titleKey, bodyKey }) => (
+                  <motion.div key={titleKey} className="flex gap-4" variants={listItemVariants}>
                     <IconDot icon={icon} />
                     <div>
-                      <h4 className="font-semibold text-foreground mb-1">{title}</h4>
-                      <p className="text-muted-foreground text-[15px] leading-relaxed">{body}</p>
+                      <h4 className="font-semibold text-foreground mb-1">{t(titleKey as any)}</h4>
+                      <p className="text-muted-foreground text-[15px] leading-relaxed">{t(bodyKey as any)}</p>
                     </div>
                   </motion.div>
                 ))}
@@ -114,10 +116,9 @@ const Services = () => {
               transition={{ duration: 0.7, ease: 'easeOut', delay: 0.15 }}
               viewport={{ once: false, amount: 0.2 }}
             >
-              <h2 className="text-[36px] font-normal text-foreground mb-4 tracking-tight">Project-Based Development</h2>
+              <h2 className="text-[36px] font-normal text-foreground mb-4 tracking-tight">{t('projectTitle')}</h2>
               <p className="text-[18px] text-muted-foreground mb-10 leading-relaxed">
-                End-to-end execution for well-defined technical initiatives.
-                We turn your requirements into delivered, high-quality software.
+                {t('projectBody')}
               </p>
               <motion.div
                 className="space-y-8"
@@ -127,17 +128,17 @@ const Services = () => {
                 viewport={{ once: false, amount: 0.2 }}
               >
                 {[
-                  { icon: Target,     title: 'Fixed Scope',     body: 'Clear deliverables, structured timelines, and predictable costs established confidently from day one.' },
-                  { icon: Flag,       title: 'Milestones',      body: 'Phased delivery approaches that ensure transparency, adaptability, and regular value creation.' },
-                  { icon: TrendingUp, title: 'Pilot Projects',  body: 'Low-risk initial engagements designed to prove our delivery model before scaling up the partnership.' },
-                ].map(({ icon, title, body }) => (
-                  <motion.div key={title} className="flex gap-4" variants={listItemVariants}>
+                  { icon: Target,     titleKey: 'fixedScopeTitle', bodyKey: 'fixedScopeBody' },
+                  { icon: Flag,       titleKey: 'milestonesTitle', bodyKey: 'milestonesBody' },
+                  { icon: TrendingUp, titleKey: 'pilotTitle',      bodyKey: 'pilotBody' },
+                ].map(({ icon, titleKey, bodyKey }) => (
+                  <motion.div key={titleKey} className="flex gap-4" variants={listItemVariants}>
                     <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center flex-shrink-0">
                       {(() => { const Icon = icon; return <Icon className="w-4 h-4 text-primary" />; })()}
                     </div>
                     <div>
-                      <h4 className="font-semibold text-foreground mb-1">{title}</h4>
-                      <p className="text-muted-foreground text-[15px] leading-relaxed">{body}</p>
+                      <h4 className="font-semibold text-foreground mb-1">{t(titleKey as any)}</h4>
+                      <p className="text-muted-foreground text-[15px] leading-relaxed">{t(bodyKey as any)}</p>
                     </div>
                   </motion.div>
                 ))}
@@ -157,10 +158,9 @@ const Services = () => {
             transition={{ duration: 0.6, ease: 'easeOut' }}
             viewport={{ once: false, amount: 0.2 }}
           >
-            <h2 className="text-[36px] font-normal text-foreground mb-4 tracking-tight">Technical Leadership</h2>
+            <h2 className="text-[36px] font-normal text-foreground mb-4 tracking-tight">{t('techLeadershipTitle')}</h2>
             <p className="text-[18px] text-muted-foreground mb-16 max-w-xl leading-relaxed">
-              Building your technology strategy and ensuring high standards of
-              engineering excellence across your organisation.
+              {t('techLeadershipSubtitle')}
             </p>
           </motion.div>
           <motion.div
@@ -171,17 +171,17 @@ const Services = () => {
             viewport={{ once: false, amount: 0.15 }}
           >
             {[
-              { icon: Cpu,      title: 'Architecture',      body: 'Designing scalable, secure, and maintainable system architectures tailored to your long-term business goals.' },
-              { icon: Code,     title: 'Code Quality',      body: 'Establishing rigorous standards, conducting comprehensive code reviews, and maintaining strict technical hygiene.' },
-              { icon: UserPlus, title: 'Hiring Support',    body: 'Assisting in technical evaluations, interviewing processes, and building internal capabilities alongside our teams.' },
-            ].map(({ icon: Icon, title, body }) => (
-              <motion.div key={title} variants={cardVariants}>
+              { icon: Cpu,      titleKey: 'architectureTitle', bodyKey: 'architectureBody' },
+              { icon: Code,     titleKey: 'codeQualityTitle',  bodyKey: 'codeQualityBody' },
+              { icon: UserPlus, titleKey: 'hiringSupportTitle', bodyKey: 'hiringSupportBody' },
+            ].map(({ icon: Icon, titleKey, bodyKey }) => (
+              <motion.div key={titleKey} variants={cardVariants}>
                 <Card variant="soft" className="p-8">
                   <div className="w-12 h-12 rounded-[8px] bg-primary flex items-center justify-center mb-6">
                     <Icon className="w-5 h-5 text-white" />
                   </div>
-                  <h3 className="text-lg font-semibold text-foreground mb-3">{title}</h3>
-                  <p className="text-muted-foreground leading-relaxed text-sm">{body}</p>
+                  <h3 className="text-lg font-semibold text-foreground mb-3">{t(titleKey as any)}</h3>
+                  <p className="text-muted-foreground leading-relaxed text-sm">{t(bodyKey as any)}</p>
                 </Card>
               </motion.div>
             ))}

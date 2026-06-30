@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
+import { useTranslations } from 'next-intl';
 import CtaSection from '@/components/home/CtaSection';
 import PageHero from '@/components/ui/page-hero';
 import PageTransition from '@/components/PageTransition';
@@ -20,12 +21,14 @@ const cardVariants = {
 };
 
 const About = () => {
+  const t = useTranslations('about');
+
   return (
     <PageTransition>
       <PageHero
-        label="Who We Are"
-        title="About Wager Technik"
-        subtitle="We are a dedicated IT delivery partner focused on bringing reliable engineering capacity to ambitious companies."
+        label={t('heroLabel')}
+        title={t('heroTitle')}
+        subtitle={t('heroSubtitle')}
       />
 
       {/* Section 1: Leadership & Vision */}
@@ -48,15 +51,12 @@ const About = () => {
               transition={{ duration: 0.7, ease: 'easeOut', delay: 0.15 }}
               viewport={{ once: false, amount: 0.2 }}
             >
-              <h2 className="text-[36px] font-normal text-foreground mb-6 tracking-tight">Leadership & Vision</h2>
+              <h2 className="text-[36px] font-normal text-foreground mb-6 tracking-tight">{t('leadershipTitle')}</h2>
               <p className="text-[18px] text-muted-foreground mb-6 leading-relaxed">
-                With deep roots in software engineering and technical leadership, our founding
-                philosophy revolves around bridging the gap between talent and structured delivery.
+                {t('leadershipBody1')}
               </p>
               <p className="text-[18px] text-muted-foreground leading-relaxed">
-                We believe in building operational models that empower engineers to do their best
-                work while guaranteeing accountability, predictability, and high-quality results
-                for our partners.
+                {t('leadershipBody2')}
               </p>
             </motion.div>
           </div>
@@ -73,9 +73,9 @@ const About = () => {
             transition={{ duration: 0.6, ease: 'easeOut' }}
             viewport={{ once: false, amount: 0.2 }}
           >
-            <h2 className="text-[36px] font-normal text-foreground mb-4 tracking-tight">Our Philosophy</h2>
+            <h2 className="text-[36px] font-normal text-foreground mb-4 tracking-tight">{t('philosophyTitle')}</h2>
             <p className="text-[18px] text-muted-foreground mb-16 max-w-xl leading-relaxed">
-              The core principles that guide our work, shape our teams, and define our partnerships.
+              {t('philosophySubtitle')}
             </p>
           </motion.div>
           <motion.div
@@ -86,17 +86,17 @@ const About = () => {
             viewport={{ once: false, amount: 0.15 }}
           >
             {[
-              { icon: CheckCircle, title: 'Quality',                body: 'We do not compromise on engineering standards. High-quality code and robust architecture are the foundation of sustainable software products.' },
-              { icon: Shield,      title: 'Accountability',         body: 'We take full ownership of the delivery process. When we commit to a project or capacity, we guarantee reliable and predictable outcomes.' },
-              { icon: Link2,       title: 'Long-Term Partnerships', body: 'We build lasting relationships based on trust, total transparency, and a shared commitment to achieving your business goals.' },
-            ].map(({ icon: Icon, title, body }) => (
-              <motion.div key={title} variants={cardVariants}>
+              { icon: CheckCircle, titleKey: 'qualityTitle',       bodyKey: 'qualityBody' },
+              { icon: Shield,      titleKey: 'accountabilityTitle', bodyKey: 'accountabilityBody' },
+              { icon: Link2,       titleKey: 'partnershipsTitle',   bodyKey: 'partnershipsBody' },
+            ].map(({ icon: Icon, titleKey, bodyKey }) => (
+              <motion.div key={titleKey} variants={cardVariants}>
                 <Card variant="soft" className="p-8">
                   <div className="w-12 h-12 rounded-[8px] bg-primary flex items-center justify-center mb-6">
                     <Icon className="w-5 h-5 text-white" />
                   </div>
-                  <h3 className="text-lg font-semibold text-foreground mb-3">{title}</h3>
-                  <p className="text-muted-foreground leading-relaxed text-sm">{body}</p>
+                  <h3 className="text-lg font-semibold text-foreground mb-3">{t(titleKey as any)}</h3>
+                  <p className="text-muted-foreground leading-relaxed text-sm">{t(bodyKey as any)}</p>
                 </Card>
               </motion.div>
             ))}
@@ -114,9 +114,9 @@ const About = () => {
             transition={{ duration: 0.6, ease: 'easeOut' }}
             viewport={{ once: false, amount: 0.2 }}
           >
-            <h2 className="text-[36px] font-normal text-foreground mb-4 tracking-tight">Locations & Reach</h2>
+            <h2 className="text-[36px] font-normal text-foreground mb-4 tracking-tight">{t('locationsTitle')}</h2>
             <p className="text-[18px] text-muted-foreground mb-16 max-w-xl leading-relaxed">
-              Combining strict German accountability with exceptional global engineering talent.
+              {t('locationsSubtitle')}
             </p>
           </motion.div>
           <motion.div
@@ -127,29 +127,19 @@ const About = () => {
             viewport={{ once: false, amount: 0.15 }}
           >
             {[
-              {
-                icon: MapPin,
-                title: 'Germany',
-                body: 'Our headquarters and the centre of our operations, legal compliance, and strategic management. We bring German accountability, solid legal frameworks, and structured processes to every engagement.',
-                detail: 'Schwalbenweg 11, 72356 Dautmergen',
-              },
-              {
-                icon: Globe,
-                title: 'Remote Teams',
-                body: "We source vetted, top-tier engineering talent globally. Our remote delivery centres are integrated seamlessly into our strict quality and management frameworks to ensure peak performance.",
-                detail: 'Global delivery capability',
-              },
-            ].map(({ icon: Icon, title, body, detail }) => (
-              <motion.div key={title} variants={cardVariants}>
+              { icon: MapPin, titleKey: 'germanyTitle', bodyKey: 'germanyBody', detailKey: 'germanyDetail' },
+              { icon: Globe,  titleKey: 'remoteTitle',  bodyKey: 'remoteBody',  detailKey: 'remoteDetail' },
+            ].map(({ icon: Icon, titleKey, bodyKey, detailKey }) => (
+              <motion.div key={titleKey} variants={cardVariants}>
                 <Card variant="soft" className="p-10">
                   <div className="flex items-center gap-4 mb-6">
                     <div className="w-12 h-12 rounded-[8px] bg-primary flex items-center justify-center">
                       <Icon className="w-5 h-5 text-white" />
                     </div>
-                    <h3 className="text-[22px] font-semibold text-foreground">{title}</h3>
+                    <h3 className="text-[22px] font-semibold text-foreground">{t(titleKey as any)}</h3>
                   </div>
-                  <p className="text-muted-foreground leading-relaxed text-[15px] mb-4">{body}</p>
-                  <span className="text-xs text-primary font-medium uppercase tracking-wide">{detail}</span>
+                  <p className="text-muted-foreground leading-relaxed text-[15px] mb-4">{t(bodyKey as any)}</p>
+                  <span className="text-xs text-primary font-medium uppercase tracking-wide">{t(detailKey as any)}</span>
                 </Card>
               </motion.div>
             ))}

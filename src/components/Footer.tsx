@@ -1,7 +1,15 @@
+"use client";
+
 import React from 'react';
 import Link from 'next/link';
+import { useTranslations, useLocale } from 'next-intl';
 
 const Footer = () => {
+  const t = useTranslations('footer');
+  const locale = useLocale();
+
+  const localePath = (path: string) => locale === 'de' ? `/de${path}` : path;
+
   return (
     <footer className="bg-[#f8fafc] pt-16 pb-8 border-t border-[#e2e8f0]">
       <div className="container-max">
@@ -20,17 +28,17 @@ const Footer = () => {
           </div>
 
           <div>
-            <h5 className="text-[14px] font-semibold tracking-[0.05em] uppercase text-[#0f172a] mb-6">Company</h5>
+            <h5 className="text-[14px] font-semibold tracking-[0.05em] uppercase text-[#0f172a] mb-6">{t('companyHeading')}</h5>
             <ul className="space-y-3">
               {[
-                { label: 'About Us',    path: '/about' },
-                { label: 'Services',    path: '/services' },
-                { label: 'How We Work', path: '/how-we-work' },
-                { label: 'Our Model',   path: '/our-model' },
-              ].map(({ label, path }) => (
-                <li key={label}>
-                  <Link href={path} className="text-[15px] text-[#64748b] hover:text-[#0f172a] transition-colors">
-                    {label}
+                { labelKey: 'aboutUs',    path: '/about' },
+                { labelKey: 'services',   path: '/services' },
+                { labelKey: 'howWeWork',  path: '/how-we-work' },
+                { labelKey: 'ourModel',   path: '/our-model' },
+              ].map(({ labelKey, path }) => (
+                <li key={labelKey}>
+                  <Link href={localePath(path)} className="text-[15px] text-[#64748b] hover:text-[#0f172a] transition-colors">
+                    {t(labelKey as any)}
                   </Link>
                 </li>
               ))}
@@ -38,22 +46,22 @@ const Footer = () => {
           </div>
 
           <div>
-            <h5 className="text-[14px] font-semibold tracking-[0.05em] uppercase text-[#0f172a] mb-6">Legal</h5>
+            <h5 className="text-[14px] font-semibold tracking-[0.05em] uppercase text-[#0f172a] mb-6">{t('legalHeading')}</h5>
             <ul className="space-y-3">
-              <li><Link href="/impressum" className="text-[15px] text-[#64748b] hover:text-[#0f172a] transition-colors">Impressum</Link></li>
-              <li><Link href="/privacy" className="text-[15px] text-[#64748b] hover:text-[#0f172a] transition-colors">Datenschutz (Privacy)</Link></li>
+              <li><Link href={localePath('/impressum')} className="text-[15px] text-[#64748b] hover:text-[#0f172a] transition-colors">{t('impressum')}</Link></li>
+              <li><Link href={localePath('/privacy')} className="text-[15px] text-[#64748b] hover:text-[#0f172a] transition-colors">{t('privacy')}</Link></li>
             </ul>
           </div>
         </div>
 
         <div className="pt-8 flex flex-col md:flex-row justify-between items-center text-[14px] text-[#64748b] gap-4">
-          <p>© {new Date().getFullYear()} Wager Technik. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} Wager Technik. {t('rights')}</p>
           <p>
-            Designed by{' '}
-            <a 
-              href="https://maxmarkagency.com" 
-              target="_blank" 
-              rel="noopener noreferrer" 
+            {t('designedBy')}{' '}
+            <a
+              href="https://maxmarkagency.com"
+              target="_blank"
+              rel="noopener noreferrer"
               className="hover:text-[#0f172a] transition-colors"
             >
               Maxmark Agency

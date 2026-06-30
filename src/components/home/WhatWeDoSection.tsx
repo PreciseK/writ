@@ -1,9 +1,12 @@
 "use client";
 import React from 'react';
 import { motion } from 'framer-motion';
+import { useTranslations } from 'next-intl';
 import { HeroBackground } from '@/components/ui/hero-background';
 
 export default function WhatWeDoSection() {
+  const t = useTranslations('whatWeDo');
+
   return (
     <section className="relative overflow-hidden pt-12 pb-24 md:py-24 bg-[#FDFBF7]">
       <HeroBackground />
@@ -24,7 +27,7 @@ export default function WhatWeDoSection() {
               transition={{ duration: 0.6, ease: 'easeOut' }}
               viewport={{ once: false, amount: 0.2 }}
             >
-              What We Do
+              {t('title')}
             </motion.h2>
             <motion.p
               className="text-muted-foreground text-lg leading-relaxed mb-6"
@@ -33,7 +36,7 @@ export default function WhatWeDoSection() {
               transition={{ duration: 0.6, ease: 'easeOut', delay: 0.15 }}
               viewport={{ once: false, amount: 0.2 }}
             >
-              Wager Technik is a subcontracting partner for organisations that already deliver technology and need to deliver more. We provide dedicated delivery teams that work alongside your organisation while Wager Technik remains fully accountable for delivery quality, technical standards, and outcomes.
+              {t('body1')}
             </motion.p>
             <motion.p
               className="text-muted-foreground text-lg leading-relaxed"
@@ -42,7 +45,7 @@ export default function WhatWeDoSection() {
               transition={{ duration: 0.6, ease: 'easeOut', delay: 0.15 }}
               viewport={{ once: false, amount: 0.2 }}
             >
-              We are not a staff augmentation provider. We deliver structured, outcome-focused engineering capacity.
+              {t('body2')}
             </motion.p>
           </motion.div>
 

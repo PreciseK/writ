@@ -17,17 +17,18 @@ const BASE_TILTS = [-4, 5, -2, 6, -3, 4, -6];
 const N_REPEATS = 5;
 const people = Array.from({ length: N_REPEATS }, () => BASE_PEOPLE).flat();
 const tilts  = Array.from({ length: N_REPEATS }, () => BASE_TILTS).flat();
-const TOTAL  = people.length;
 
 const ORBIT_DURATION = 50;
 
-// On mobile, pivotY is set very high (100px from section top) so the orbit
-// centre sits well above section centre (DY = 100 − sectionH/2 = −250).
-// This keeps all visible images in the top ~230 px, leaving the text clear.
+// Mobile: pivotY = sectionH/2 so DY = 0 — orbit centres exactly on the
+// section centre where the content lives, forming a complete visible ring.
+// Only 7 images are rendered on mobile so the ring has clean gaps.
+// Tablet/desktop: large radius with orbit centre well below the section,
+// showing only the top arc — the original "horizon" effect.
 function getOrbitConfig(width = 1200) {
-  if (width < 640)  return { radius: 140, pivotY: 100,  sectionH: 700, imgW: 82,  imgH: 110 };
-  if (width < 1024) return { radius: 620, pivotY: 820,  sectionH: 760, imgW: 130, imgH: 175 };
-  return               { radius: 1100, pivotY: 1220, sectionH: 800, imgW: 170, imgH: 230 };
+  if (width < 640)  return { radius: 150, pivotY: 225, sectionH: 450, imgW: 58,  imgH: 79,  imageCount: 7  };
+  if (width < 1024) return { radius: 620, pivotY: 820, sectionH: 760, imgW: 130, imgH: 175, imageCount: 21 };
+  return                   { radius: 1100, pivotY: 1220, sectionH: 800, imgW: 170, imgH: 230, imageCount: 35 };
 }
 
 const CtaSection = () => {
@@ -35,17 +36,23 @@ const CtaSection = () => {
   const refs    = useRef<(HTMLDivElement | null)[]>([]);
   const rafId   = useRef<number>(0);
   const startTs = useRef<number>(0);
-  // SSR-safe desktop defaults — corrected after hydration in useEffect
-  const orbitRef = useRef(getOrbitConfig());
-  const [imgSize, setImgSize]   = useState({ w: 170, h: 230 });
-  const [sectionH, setSectionH] = useState(800);
+
+  // SSR-safe desktop defaults — updated after hydration in useEffect
+  const orbitRef       = useRef(getOrbitConfig());
+  const renderCountRef = useRef(35);
+
+  const [imgSize, setImgSize]         = useState({ w: 170, h: 230 });
+  const [sectionH, setSectionH]       = useState(800);
+  const [renderCount, setRenderCount] = useState(35);
 
   useEffect(() => {
     const update = (w: number) => {
       const cfg = getOrbitConfig(w);
-      orbitRef.current = cfg;
+      orbitRef.current       = cfg;
+      renderCountRef.current = cfg.imageCount;
       setImgSize({ w: cfg.imgW, h: cfg.imgH });
       setSectionH(cfg.sectionH);
+      setRenderCount(cfg.imageCount);
     };
     update(window.innerWidth);
     const onResize = () => update(window.innerWidth);
@@ -60,15 +67,17 @@ const CtaSection = () => {
       const base    = (elapsed / ORBIT_DURATION) * 2 * Math.PI;
       const { radius, pivotY, sectionH: sh } = orbitRef.current;
       const dy = pivotY - sh / 2;
+      const rc = renderCountRef.current;
 
-      for (let i = 0; i < TOTAL; i++) {
+      for (let i = 0; i < rc; i++) {
         const el = refs.current[i];
         if (!el) continue;
-        const a = (2 * Math.PI * i / TOTAL) + base;
+        // Space images evenly around the full circle using rc (not total pool)
+        const a = (2 * Math.PI * i / rc) + base;
         const x = (radius * Math.sin(a)).toFixed(2);
         const y = (dy - radius * Math.cos(a)).toFixed(2);
         el.style.transform =
-          `translate(calc(-50% + ${x}px), calc(-50% + ${y}px)) rotate(${tilts[i]}deg)`;
+          `translate(calc(-50% + ${x}px), calc(-50% + ${y}px)) rotate(${tilts[i % tilts.length]}deg)`;
       }
       rafId.current = requestAnimationFrame(tick);
     };
@@ -78,11 +87,13 @@ const CtaSection = () => {
   }, []);
 
   return (
+    // Mobile: justify-center so content sits at section centre (inside the ring)
+    // Tablet+: justify-end so content sits at bottom below the top arc
     <section
-      className="relative overflow-hidden bg-[#F5F0E6] flex flex-col items-center justify-end pb-16 md:pb-28"
+      className="relative overflow-hidden bg-[#F5F0E6] flex flex-col items-center justify-center sm:justify-end sm:pb-28"
       style={{ height: sectionH }}
     >
-      {people.map((src, i) => (
+      {people.slice(0, renderCount).map((src, i) => (
         <div
           key={i}
           ref={el => { refs.current[i] = el; }}
@@ -95,7 +106,7 @@ const CtaSection = () => {
               width: imgSize.w,
               height: imgSize.h,
               objectFit: 'cover',
-              borderRadius: 16,
+              borderRadius: 14,
               boxShadow: '0 6px 24px rgba(0,0,0,0.18)',
               display: 'block',
             }}
@@ -103,8 +114,9 @@ const CtaSection = () => {
         </div>
       ))}
 
-      <div className="relative z-10 text-center max-w-lg mx-auto px-6">
-        <h2 className="text-3xl md:text-5xl font-bold text-gray-900 leading-tight mb-3 md:mb-4">
+      {/* Content — z-10 keeps it in front of orbit images on mobile */}
+      <div className="relative z-10 text-center max-w-[185px] sm:max-w-lg mx-auto px-2 sm:px-6">
+        <h2 className="text-[22px] sm:text-5xl font-bold text-gray-900 leading-tight mb-3 sm:mb-4">
           Let's discuss your
           <br />
           <span
@@ -115,14 +127,15 @@ const CtaSection = () => {
           </span>
         </h2>
 
-        <p className="text-gray-500 text-sm md:text-base leading-relaxed mb-6 md:mb-10 max-w-sm mx-auto">
+        {/* Paragraph hidden on mobile — not enough space inside the ring */}
+        <p className="hidden sm:block text-gray-500 text-base leading-relaxed mb-10 max-w-sm mx-auto">
           Partner with a team that takes full accountability for delivery quality,
           technical oversight, and outcomes.
         </p>
 
         <button
           onClick={() => router.push('/contact')}
-          className="inline-flex items-center gap-3 bg-gray-900 text-white px-8 py-4 rounded-full text-base font-medium hover:bg-gray-800 transition-colors shadow-lg"
+          className="inline-flex items-center gap-2 bg-gray-900 text-white px-5 py-2.5 sm:px-8 sm:py-4 rounded-full text-sm sm:text-base font-medium hover:bg-gray-800 transition-colors shadow-lg"
         >
           Book a Call
         </button>

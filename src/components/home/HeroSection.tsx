@@ -44,7 +44,7 @@ const programs = [
 ];
 
 const HeroTitle = () => (
-  <span className="block h-[150px] md:h-[190px] lg:h-[230px] w-full">
+  <span className="block h-[65px] md:h-[190px] lg:h-[230px] w-full">
     <VaporizeTextCycle
       texts={[
         "More delivery capacity.",

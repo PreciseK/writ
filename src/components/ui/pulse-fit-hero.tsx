@@ -222,7 +222,7 @@ export function PulseFitHero({
         </div>
 
         {/* Disclaimer / Captions Section */}
-        <div className="w-full max-w-5xl mx-auto px-8 mt-10 text-center">
+        <div className="w-full max-w-5xl mx-auto px-8 mt-4 md:mt-10 text-center">
           {disclaimer ? (
             <p className="text-[#6B7280] text-lg font-medium italic">
               {disclaimer}

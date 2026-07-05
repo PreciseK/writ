@@ -30,3 +30,4 @@ hero-*.png
 *.sln
 *.sw?
 .env
+*.tsbuildinfo

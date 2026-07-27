@@ -28,9 +28,9 @@ const cardVariants = {
   visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.55, ease: 'easeOut' } },
 };
 
-const IconDot = ({ icon: Icon, bg = 'bg-white' }: { icon: LucideIcon; bg?: string }) => (
-  <div className={`w-10 h-10 rounded-full ${bg} flex items-center justify-center flex-shrink-0 shadow-sm border border-border`}>
-    <Icon className="w-4 h-4 text-primary" />
+const IconDot = ({ icon: Icon, bg = 'bg-[#1a1a1a]' }: { icon: LucideIcon; bg?: string }) => (
+  <div className={`w-10 h-10 rounded-full ${bg} flex items-center justify-center flex-shrink-0 shadow-sm`}>
+    <Icon className="w-4 h-4 text-white" />
   </div>
 );
 
@@ -132,7 +132,7 @@ const HowWeWorkClient = () => {
                   { icon: Eye,       titleKey: 'transparencyTitle',  bodyKey: 'transparencyBody' },
                 ].map(({ icon, titleKey, bodyKey }) => (
                   <motion.div key={titleKey} className="flex gap-4" variants={listItemVariants}>
-                    <IconDot icon={icon} bg="bg-blue-50" />
+                    <IconDot icon={icon} />
                     <div>
                       <h4 className="font-semibold text-foreground mb-1">{t(titleKey as any)}</h4>
                       <p className="text-muted-foreground text-[15px] leading-relaxed">{t(bodyKey as any)}</p>
@@ -174,7 +174,7 @@ const HowWeWorkClient = () => {
             ].map(({ icon: Icon, titleKey, bodyKey }) => (
               <motion.div key={titleKey} variants={cardVariants}>
                 <Card variant="soft" className="p-8">
-                  <div className="w-12 h-12 rounded-[8px] bg-primary flex items-center justify-center mb-6">
+                  <div className="w-12 h-12 rounded-[8px] bg-[#1a1a1a] flex items-center justify-center mb-6">
                     <Icon className="w-5 h-5 text-white" />
                   </div>
                   <h3 className="text-lg font-semibold text-foreground mb-3">{t(titleKey as any)}</h3>

@@ -30,7 +30,7 @@ const cardVariants = {
 
 const IconDot = ({ icon: Icon }: { icon: LucideIcon }) => (
   <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center flex-shrink-0 shadow-sm border border-border">
-    <Icon className="w-4 h-4 text-primary" />
+    <Icon className="w-4 h-4 text-foreground" />
   </div>
 );
 
@@ -133,8 +133,8 @@ const ServicesClient = () => {
                   { icon: TrendingUp, titleKey: 'pilotTitle',      bodyKey: 'pilotBody' },
                 ].map(({ icon, titleKey, bodyKey }) => (
                   <motion.div key={titleKey} className="flex gap-4" variants={listItemVariants}>
-                    <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center flex-shrink-0">
-                      {(() => { const Icon = icon; return <Icon className="w-4 h-4 text-primary" />; })()}
+                    <div className="w-10 h-10 rounded-full bg-[#1a1a1a] flex items-center justify-center flex-shrink-0">
+                      {(() => { const Icon = icon; return <Icon className="w-4 h-4 text-white" />; })()}
                     </div>
                     <div>
                       <h4 className="font-semibold text-foreground mb-1">{t(titleKey as any)}</h4>
@@ -177,7 +177,7 @@ const ServicesClient = () => {
             ].map(({ icon: Icon, titleKey, bodyKey }) => (
               <motion.div key={titleKey} variants={cardVariants}>
                 <Card variant="soft" className="p-8">
-                  <div className="w-12 h-12 rounded-[8px] bg-primary flex items-center justify-center mb-6">
+                  <div className="w-12 h-12 rounded-[8px] bg-[#1a1a1a] flex items-center justify-center mb-6">
                     <Icon className="w-5 h-5 text-white" />
                   </div>
                   <h3 className="text-lg font-semibold text-foreground mb-3">{t(titleKey as any)}</h3>

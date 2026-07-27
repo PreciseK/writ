@@ -65,8 +65,8 @@ const OurModelClient = () => {
                   { icon: Target,    titleKey: 'deliveryFocusedTitle', bodyKey: 'deliveryFocusedBody' },
                 ].map(({ icon: Icon, titleKey, bodyKey }) => (
                   <motion.div key={titleKey} className="flex gap-4" variants={listItemVariants}>
-                    <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center flex-shrink-0">
-                      <Icon className="w-4 h-4 text-primary" />
+                    <div className="w-10 h-10 rounded-full bg-[#1a1a1a] flex items-center justify-center flex-shrink-0">
+                      <Icon className="w-4 h-4 text-white" />
                     </div>
                     <div>
                       <h4 className="font-semibold text-foreground mb-1">{t(titleKey as any)}</h4>
@@ -167,8 +167,8 @@ const OurModelClient = () => {
                   { icon: Clock,       titleKey: 'predictabilityTitle', bodyKey: 'predictabilityBody' },
                 ].map(({ icon: Icon, titleKey, bodyKey }) => (
                   <motion.div key={titleKey} className="flex gap-4" variants={listItemVariants}>
-                    <div className="w-10 h-10 rounded-[8px] bg-blue-50 flex items-center justify-center flex-shrink-0">
-                      <Icon className="w-4 h-4 text-primary" />
+                    <div className="w-10 h-10 rounded-[8px] bg-[#1a1a1a] flex items-center justify-center flex-shrink-0">
+                      <Icon className="w-4 h-4 text-white" />
                     </div>
                     <div>
                       <h4 className="font-semibold text-foreground mb-1">{t(titleKey as any)}</h4>

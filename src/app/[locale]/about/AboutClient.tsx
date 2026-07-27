@@ -92,7 +92,7 @@ const AboutClient = () => {
             ].map(({ icon: Icon, titleKey, bodyKey }) => (
               <motion.div key={titleKey} variants={cardVariants}>
                 <Card variant="soft" className="p-8">
-                  <div className="w-12 h-12 rounded-[8px] bg-primary flex items-center justify-center mb-6">
+                  <div className="w-12 h-12 rounded-[8px] bg-[#1a1a1a] flex items-center justify-center mb-6">
                     <Icon className="w-5 h-5 text-white" />
                   </div>
                   <h3 className="text-lg font-semibold text-foreground mb-3">{t(titleKey as any)}</h3>
@@ -133,7 +133,7 @@ const AboutClient = () => {
               <motion.div key={titleKey} variants={cardVariants}>
                 <Card variant="soft" className="p-10">
                   <div className="flex items-center gap-4 mb-6">
-                    <div className="w-12 h-12 rounded-[8px] bg-primary flex items-center justify-center">
+                    <div className="w-12 h-12 rounded-[8px] bg-[#1a1a1a] flex items-center justify-center">
                       <Icon className="w-5 h-5 text-white" />
                     </div>
                     <h3 className="text-[22px] font-semibold text-foreground">{t(titleKey as any)}</h3>

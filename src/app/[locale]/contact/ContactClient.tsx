@@ -34,8 +34,8 @@ const ContactClient = () => {
             >
               <div className="space-y-8">
                 <div className="flex items-start gap-5">
-                  <div className="w-12 h-12 rounded-[8px] bg-[#f8fafc] flex items-center justify-center flex-shrink-0 border border-border">
-                    <Mail className="w-5 h-5 text-primary" />
+                  <div className="w-12 h-12 rounded-[8px] bg-[#1a1a1a] flex items-center justify-center flex-shrink-0">
+                    <Mail className="w-5 h-5 text-white" />
                   </div>
                   <div>
                     <h4 className="font-semibold text-foreground mb-1">{t('emailLabel')}</h4>
@@ -46,8 +46,8 @@ const ContactClient = () => {
                 </div>
 
                 <div className="flex items-start gap-5">
-                  <div className="w-12 h-12 rounded-[8px] bg-[#f8fafc] flex items-center justify-center flex-shrink-0 border border-border">
-                    <Phone className="w-5 h-5 text-primary" />
+                  <div className="w-12 h-12 rounded-[8px] bg-[#1a1a1a] flex items-center justify-center flex-shrink-0">
+                    <Phone className="w-5 h-5 text-white" />
                   </div>
                   <div>
                     <h4 className="font-semibold text-foreground mb-1">{t('phoneLabel')}</h4>
@@ -58,8 +58,8 @@ const ContactClient = () => {
                 </div>
 
                 <div className="flex items-start gap-5">
-                  <div className="w-12 h-12 rounded-[8px] bg-[#f8fafc] flex items-center justify-center flex-shrink-0 border border-border">
-                    <MapPin className="w-5 h-5 text-primary" />
+                  <div className="w-12 h-12 rounded-[8px] bg-[#1a1a1a] flex items-center justify-center flex-shrink-0">
+                    <MapPin className="w-5 h-5 text-white" />
                   </div>
                   <div>
                     <h4 className="font-semibold text-foreground mb-1">{t('locationLabel')}</h4>

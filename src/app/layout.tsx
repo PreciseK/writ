@@ -1,6 +1,7 @@
 import '../index.css';
 import React, { ReactNode } from 'react';
 import { Instrument_Serif } from 'next/font/google';
+import type { Viewport } from 'next';
 
 const instrumentSerif = Instrument_Serif({
   weight: '400',
@@ -11,6 +12,10 @@ const instrumentSerif = Instrument_Serif({
 });
 
 const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://wagertechnik.de';
+
+export const viewport: Viewport = {
+  themeColor: '#0f172a',
+};
 
 export const metadata = {
   metadataBase: new URL(baseUrl),
@@ -47,7 +52,6 @@ export const metadata = {
   },
   icons: { icon: '/favicon.png', apple: '/favicon.png' },
   manifest: '/site.webmanifest',
-  themeColor: '#0f172a',
   openGraph: {
     type: 'website',
     locale: 'en_US',

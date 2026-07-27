@@ -46,6 +46,8 @@ export const metadata = {
     },
   },
   icons: { icon: '/favicon.png', apple: '/favicon.png' },
+  manifest: '/site.webmanifest',
+  themeColor: '#0f172a',
   openGraph: {
     type: 'website',
     locale: 'en_US',

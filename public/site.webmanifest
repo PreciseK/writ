@@ -1,0 +1,16 @@
+{
+  "name": "Wager Technik",
+  "short_name": "Wager Technik",
+  "description": "Dedicated IT Delivery Teams under a capacity-based subcontracting model.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0f172a",
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

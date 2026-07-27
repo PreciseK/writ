@@ -8,35 +8,24 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import { cn } from "@/lib/utils";
 import { HeroBackground } from "./hero-background";
+import { CoverflowGallery } from "./coverflow-gallery";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
-
-// ---- Concave-fan geometry (pure rotateY + uniform translateX) -------------
-const VISIBLE_COUNT = 7;
-const STEP_DEG = 22;
 
 function getCardConfig(width?: number) {
   const w = width ?? (typeof window !== "undefined" ? window.innerWidth : 1200);
   // scrollDist controls how far the user scrolls before WhatWeDoSection appears.
   // Mobile uses 60vh so the sticky hero exits quickly; desktop keeps 140vh for
   // the full cinematic spread feel.
-  if (w < 640)  return { w: 78,  h: 116, spacing: 68,  heroHeight: "100vh", scrollDist: "60vh"  };
-  if (w < 1024) return { w: 170, h: 255, spacing: 155, heroHeight: "125vh", scrollDist: "100vh" };
-  return               { w: 240, h: 360, spacing: 224, heroHeight: "140vh", scrollDist: "140vh" };
+  if (w < 640)  return { w: 78,  h: 116, heroHeight: "100vh", scrollDist: "60vh"  };
+  if (w < 1024) return { w: 170, h: 255, heroHeight: "125vh", scrollDist: "100vh" };
+  return               { w: 240, h: 360, heroHeight: "140vh", scrollDist: "140vh" };
 }
 
 const prefersReducedMotion = () =>
   typeof window !== "undefined" &&
   window.matchMedia &&
   window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-function arcTargetForIndex(idx: number, spacing: number) {
-  const offset = idx - Math.floor(VISIBLE_COUNT / 2);
-  return {
-    x: offset * spacing,
-    rotateY: -offset * STEP_DEG,
-  };
-}
 
 interface Action {
   label: string;
@@ -77,7 +66,7 @@ export function PulseFitHero({
 }: PulseFitHeroProps) {
   // SSR-safe: always start with desktop defaults so server/client HTML matches,
   // then correct to actual screen size after hydration in useEffect.
-  const [cardCfg, setCardCfg] = useState({ w: 240, h: 360, spacing: 224, heroHeight: "140vh", scrollDist: "140vh" }); // desktop defaults for SSR
+  const [cardCfg, setCardCfg] = useState({ w: 240, h: 360, heroHeight: "140vh", scrollDist: "140vh" }); // desktop defaults for SSR
 
   useEffect(() => {
     setCardCfg(getCardConfig(window.innerWidth));
@@ -90,53 +79,32 @@ export function PulseFitHero({
   const wrapperRef = useRef<HTMLDivElement>(null);
   // containerRef: sticky inner div — the GSAP scope
   const containerRef = useRef<HTMLDivElement>(null);
-  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
 
-  const cards = [];
-  for (let i = 0; i < VISIBLE_COUNT; i++) {
-    cards.push(programs[i % Math.max(programs.length, 1)]);
-  }
+  // Continuous coverflow position (0..programs.length-1), driven by scroll.
+  const [galleryProgress, setGalleryProgress] = useState(0);
 
   useGSAP(
     () => {
-      const els = cardRefs.current.filter(Boolean) as HTMLDivElement[];
-      if (els.length !== VISIBLE_COUNT || !wrapperRef.current) return;
-
-      const targets = els.map((_, idx) => arcTargetForIndex(idx, cardCfg.spacing));
+      if (!wrapperRef.current || programs.length === 0) return;
 
       if (prefersReducedMotion()) {
-        els.forEach((el, idx) => gsap.set(el, targets[idx]));
+        setGalleryProgress((programs.length - 1) / 2);
         return;
       }
 
-      els.forEach((el) => gsap.set(el, { x: 0, rotateY: 0 }));
-
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          // Trigger on the tall outer wrapper — CSS sticky keeps the hero
-          // pinned natively; GSAP just drives the card spread animation.
-          trigger: wrapperRef.current,
-          start: "top top",
-          end: `+=${cardCfg.scrollDist}`,
-          scrub: 0.5,
-          fastScrollEnd: true,
-          invalidateOnRefresh: true,
-        },
-      });
-
-      els.forEach((el, idx) => {
-        tl.to(
-          el,
-          {
-            x: targets[idx].x,
-            rotateY: targets[idx].rotateY,
-            ease: "power2.out",
-          },
-          0
-        );
+      ScrollTrigger.create({
+        // Trigger on the tall outer wrapper — CSS sticky keeps the hero
+        // pinned natively; GSAP just drives the coverflow position.
+        trigger: wrapperRef.current,
+        start: "top top",
+        end: `+=${cardCfg.scrollDist}`,
+        scrub: 0.5,
+        fastScrollEnd: true,
+        invalidateOnRefresh: true,
+        onUpdate: (self) => setGalleryProgress(self.progress * (programs.length - 1)),
       });
     },
-    { scope: containerRef, dependencies: [cards.length, cardCfg] }
+    { scope: containerRef, dependencies: [programs.length, cardCfg] }
   );
 
   return (
@@ -185,41 +153,21 @@ export function PulseFitHero({
           </div>
         </div>
 
-        {/* Stage: cards stacked at origin, animated onto the cylinder arc */}
-        <div
-          className="relative w-full flex items-center justify-center"
-          style={{
-            height: cardCfg.h + 40,
-            perspective: "1200px",
-            perspectiveOrigin: "50% 50%",
-          }}
-        >
+        {/* Stage: scroll-driven coverflow gallery */}
+        {programs.length > 0 && (
           <div
-            className="relative"
-            style={{
-              width: cardCfg.w,
-              height: cardCfg.h,
-              transformStyle: "preserve-3d",
-            }}
+            className="relative w-full flex items-center justify-center"
+            style={{ height: cardCfg.h + 40 }}
           >
-            {cards.map((program, idx) => {
-              const offset = idx - Math.floor(VISIBLE_COUNT / 2);
-              const z = VISIBLE_COUNT - Math.abs(offset);
-              return (
-                <CurvedCard
-                  key={idx}
-                  program={program}
-                  zIndex={z}
-                  cardW={cardCfg.w}
-                  cardH={cardCfg.h}
-                  refCb={(el) => {
-                    cardRefs.current[idx] = el;
-                  }}
-                />
-              );
-            })}
+            <CoverflowGallery
+              slides={programs.map((p) => ({ image: p.image, alt: p.title, title: p.title }))}
+              cardWidth={cardCfg.w}
+              cardHeight={cardCfg.h}
+              progress={galleryProgress}
+              showTitle={false}
+            />
           </div>
-        </div>
+        )}
 
         {/* Disclaimer / Captions Section */}
         <div className="w-full max-w-5xl mx-auto px-8 mt-4 md:mt-10 text-center">
@@ -243,38 +191,6 @@ export function PulseFitHero({
           )}
         </div>
       </div>
-    </div>
-  );
-}
-
-interface CurvedCardProps {
-  program: Program;
-  zIndex: number;
-  cardW: number;
-  cardH: number;
-  refCb: (el: HTMLDivElement | null) => void;
-}
-
-function CurvedCard({ program, zIndex, cardW, cardH, refCb }: CurvedCardProps) {
-  if (!program) return null;
-  return (
-    <div
-      ref={refCb}
-      className="absolute top-0 left-0 rounded-[22px] overflow-hidden shadow-xl"
-      style={{
-        width: cardW,
-        height: cardH,
-        zIndex,
-        transformStyle: "preserve-3d",
-        willChange: "transform",
-      }}
-    >
-      <img
-        src={program.image}
-        alt={program.title || ""}
-        className="w-full h-full object-cover pointer-events-none select-none"
-        draggable={false}
-      />
     </div>
   );
 }

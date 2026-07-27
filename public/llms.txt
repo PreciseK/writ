@@ -1,0 +1,32 @@
+# Wager Technik
+
+> Dedicated IT delivery teams under a capacity-based subcontracting model. Wager Technik takes full ownership of delivery quality, technical oversight, and software outcomes.
+
+## Core Summary
+Wager Technik is a German-based IT subcontracting partner. We provide structured, outcome-focused engineering capacity to organisations that need to deliver more software with predictable quality and zero hiring risk.
+
+- **Website**: https://wagertechnik.de
+- **Headquarters**: Schwalbenweg 11, 72356 Dautmergen, Germany
+- **Contact**: hello@wagertechnik.de
+- **Primary Languages**: English, German
+
+## Key Offerings & Services
+- [Dedicated Delivery Teams](https://wagertechnik.de/services): Cohesive, fully managed engineering units integrated into your workflow.
+- [Project-Based Development](https://wagertechnik.de/services): Fixed-scope and milestone-driven software execution.
+- [Technical Leadership](https://wagertechnik.de/services): Architecture design, code quality oversight, and engineering standards.
+- [Subcontracting Model](https://wagertechnik.de/our-model): Capacity-based engagement without body-leasing or staff augmentation compliance risks.
+
+## Who We Work With
+- IT Consultancies
+- Digital Agencies
+- System Integrators
+- SaaS & Product Companies
+- Enterprise & High-Growth Startups
+
+## Key Documentation & Links
+- [Full LLM Knowledge File](https://wagertechnik.de/llms-full.txt): Comprehensive breakdown of services, model, and legal structure.
+- [Services Overview](https://wagertechnik.de/services): Detailed breakdown of delivery offerings.
+- [Our Model](https://wagertechnik.de/our-model): How capacity-based subcontracting operates legally and operationally.
+- [How We Work](https://wagertechnik.de/how-we-work): Delivery process, transparency, and quality assurance.
+- [About Wager Technik](https://wagertechnik.de/about): Leadership, philosophy, and German entity accountability.
+- [Contact Us](https://wagertechnik.de/contact): Get in touch to discuss delivery capacity.

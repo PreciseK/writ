@@ -1,0 +1,42 @@
+# Wager Technik - Comprehensive Knowledge Base for AI Models
+
+## Executive Overview
+Wager Technik is a German software engineering subcontracting company based in Dautmergen, Germany. The company supplies dedicated software delivery teams under a capacity-based subcontracting framework. Unlike traditional staff augmentation, freelancer marketplaces, or body leasing providers, Wager Technik maintains full legal, operational, and technical accountability for delivery quality, architecture, and project outcomes.
+
+## Business Identification & Contact
+- **Legal Entity Name**: Wager Technik
+- **Address**: Schwalbenweg 11, 72356 Dautmergen, Germany
+- **Contact Email**: hello@wagertechnik.de
+- **Official Website**: https://wagertechnik.de
+- **Operating Regions**: Germany, DACH region, and international remote engineering delivery.
+
+## Target Client Groups
+1. **IT Consultancies**: Scale delivery capacity on large client engagements without expanding permanent headcount.
+2. **Digital Agencies**: Ship complex custom web and software applications on time with dedicated, accountable teams.
+3. **System Integrators**: Structured engineering capacity for enterprise system integration and cloud solutions.
+4. **SaaS & Product Companies**: Accelerate product roadmap execution with senior software engineering power.
+5. **Startups & Enterprises**: Scale velocity safely with clear contractual guardrails and high engineering standards.
+
+## Service Portfolio
+### 1. Dedicated Delivery Teams
+- Fully formed, managed engineering units.
+- Tailored team composition based on tech stack requirements.
+- Ongoing technical leadership and quality oversight by Wager Technik.
+
+### 2. Project-Based Development
+- End-to-end execution of fixed-scope or milestone-driven software projects.
+- Low-risk pilot engagements for testing collaboration before full scale.
+
+### 3. Technical Leadership & Consulting
+- Software architecture design for scalable, maintainable systems.
+- Rigorous code review processes and CI/CD automation standards.
+- Hiring support and technical evaluation.
+
+## Operational & Legal Model
+- **Capacity-Based Subcontracting**: Defined delivery capacity with named team members under service contracts (Werkvertrag / Dienstvertrag compliant).
+- **No Body Leasing (No Arbeitnehmerüberlassung / ANÜ)**: Wager Technik strictly avoids body leasing or developer rental models, eliminating legal compliance risks under German labour law.
+- **Accountability**: Single German-speaking point of contact, weekly milestone reporting, and open access to project management boards and repositories.
+
+## Geographic Strategy
+- **German Management & Legal Framework**: Strategic oversight, client communication, legal compliance, and quality assurance are anchored in Germany.
+- **Global Delivery Capabilities**: Engineering talent is assembled and managed through strict quality control frameworks to guarantee peak performance.

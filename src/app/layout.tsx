@@ -10,10 +10,66 @@ const instrumentSerif = Instrument_Serif({
   display: 'swap',
 });
 
+const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://wagertechnik.de';
+
 export const metadata = {
-  title: 'Wager Technik',
-  description: 'IT Consultancies, Digital Agencies, System Integrators',
-  icons: { icon: '/favicon.png' },
+  metadataBase: new URL(baseUrl),
+  title: {
+    default: 'Wager Technik | Dedicated IT Delivery Teams & Subcontracting',
+    template: '%s | Wager Technik',
+  },
+  description:
+    'Wager Technik provides dedicated IT delivery teams under a capacity-based subcontracting model with German operational accountability and technical oversight.',
+  keywords: [
+    'IT Subcontracting',
+    'Dedicated Delivery Teams',
+    'Software Engineering Subcontractor',
+    'IT Consultancy Partner',
+    'Digital Agency Engineering',
+    'System Integrator Capacity',
+    'German IT Subcontractor',
+    'Capacity-based Subcontracting',
+    'Wager Technik',
+  ],
+  authors: [{ name: 'Wager Technik' }],
+  creator: 'Wager Technik',
+  publisher: 'Wager Technik',
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  icons: { icon: '/favicon.png', apple: '/favicon.png' },
+  openGraph: {
+    type: 'website',
+    locale: 'en_US',
+    url: baseUrl,
+    siteName: 'Wager Technik',
+    title: 'Wager Technik | Dedicated IT Delivery Teams & Subcontracting',
+    description:
+      'Predictable IT delivery capacity without hiring risk. Dedicated teams managed with German technical accountability.',
+    images: [
+      {
+        url: '/logo.png',
+        width: 1200,
+        height: 630,
+        alt: 'Wager Technik Logo',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Wager Technik | Dedicated IT Delivery Teams',
+    description:
+      'Predictable IT delivery capacity without hiring risk. Dedicated teams managed with German technical accountability.',
+    images: ['/logo.png'],
+  },
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
